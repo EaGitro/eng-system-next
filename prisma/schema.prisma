@@ -1,0 +1,195 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ユーザの"語彙"のみのデータ
+model UserVocab {
+  id               Int                @id @default(autoincrement())
+  userId           String
+  user             User               @relation(fields: [userId], references: [id])
+  wordId           Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  level            Int // どれだけユーザが学習したか。だんだん強くなる。最初にテストして「知ってる」 => 1
+  UserVocabHistory UserVocabHistory[]
+
+  @@unique(fields: [userId, wordId])
+}
+
+// 上記の履歴
+model UserVocabHistory {
+  id          Int       @id @default(autoincrement())
+  userVocabId Int
+  userVocab   UserVocab @relation(fields: [userVocabId], references: [id])
+  createdAt   DateTime  @default(now())
+  level       Int
+}
+
+// ユーザの Synset のデータ
+model UserSynset {
+  id                Int                 @id @default(autoincrement())
+  userId            String
+  user              User                @relation(fields: [userId], references: [id])
+  synsetId          String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  level             Int
+  UserSynsetHistory UserSynsetHistory[]
+
+  @@unique(fields: [userId, synsetId])
+}
+
+// 上記の履歴
+model UserSynsetHistory {
+  id           Int        @id @default(autoincrement())
+  userSynsetId Int
+  userSynset   UserSynset @relation(fields: [userSynsetId], references: [id])
+  createdAt    DateTime   @default(now())
+  level        Int
+}
+
+// ユーザが学習した word と synset のつながり
+model UserWordSynsetRelation {
+  id                                 Int                                  @id @default(autoincrement())
+  userId                             String
+  user                               User                                 @relation(fields: [userId], references: [id])
+  wordId                             Int
+  synsetId                           String
+  createdAt                          DateTime                             @default(now())
+  updatedAt                          DateTime                             @updatedAt
+  level                              Int // もしテストに正解できなかったとしても、0のまま
+  UserWordSynsetRelationHistory      UserWordSynsetRelationHistory[]
+  UserGroupingTestWordSynsetRelation UserGroupingTestWordSynsetRelation[]
+
+  @@unique(fields: [userId, wordId, synsetId])
+}
+
+// 上記の履歴
+model UserWordSynsetRelationHistory {
+  id                       Int                    @id @default(autoincrement())
+  userWordSynsetRelationId Int
+  userWordSynsetRelation   UserWordSynsetRelation @relation(fields: [userWordSynsetRelationId], references: [id])
+  createdAt                DateTime               @default(now())
+  level                    Int
+}
+
+// ユーザの仲間外れ探しテスト履歴
+model UserGroupingTest {
+  id                                 Int                                  @id @default(autoincrement())
+  userId                             String
+  user                               User                                 @relation(fields: [userId], references: [id])
+  createdAt                          DateTime                             @default(now())
+  isPassed                           Boolean // テストを正解したかどうか
+  UserGroupingTestWordSynsetRelation UserGroupingTestWordSynsetRelation[]
+}
+
+// テストの際に主題となった word と synset の繋がり(仲間外れでないもののみ)
+model UserGroupingTestWordSynsetRelation {
+  relationId             Int
+  groupTestId            Int
+  userWordSynsetRelation UserWordSynsetRelation @relation(fields: [relationId], references: [id])
+  userGroupingTest       UserGroupingTest       @relation(fields: [groupTestId], references: [id])
+  createdAt              DateTime               @default(now())
+  // isPassed               Boolean // テストを正解したかどうか
+
+  @@id([relationId, groupTestId])
+}
+
+// // ユーザが持つ、語と語の関係を表すデータ。ユーザが獲得した語と語のつながり
+// model UserVocabRelation {
+//   id                       Int                        @id @default(autoincrement())
+//   userId                   String
+//   user                     User                       @relation(fields: [userId], references: [id])
+//   word1Id                  Int // wordid が小さい方
+//   word2Id                  Int // wordid が大きい方
+//   relationshipId           Int // どのような関係なのか とりあえず 0 で類義語
+//   createdAt                DateTime                   @default(now())
+//   updatedAt                DateTime                   @updatedAt
+//   level                    Int // どれだけユーザが学習(テスト)したか。だんだん強くなる。1から
+//   UserVocabRelationHistory UserVocabRelationHistory[]
+// }
+
+// // 上記の履歴
+// model UserVocabRelationHistory {
+//   id                  Int               @id @default(autoincrement())
+//   userVocabRelationId Int
+//   userVocabRelation   UserVocabRelation @relation(fields: [userVocabRelationId], references: [id])
+//   level               Int
+//   createdAt           DateTime          @default(now())
+// 
+//   @@unique(fields: [userVocabRelationId, level])
+// }
+
+// ---------------------------------------------------------
+// from https://authjs.dev/getting-started/adapters/prisma
+// ---------------------------------------------------------
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id                     String                   @id @default(cuid())
+  name                   String?
+  email                  String?                  @unique
+  emailVerified          DateTime?                @map("email_verified")
+  image                  String?
+  accounts               Account[]
+  sessions               Session[]
+  UserVocab              UserVocab[]
+  UserSynset             UserSynset[]
+  UserWordSynsetRelation UserWordSynsetRelation[]
+  UserGroupingTest       UserGroupingTest[]
+
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+// --------------------------------------------
+// end
+// --------------------------------------------

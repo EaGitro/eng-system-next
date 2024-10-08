@@ -1,0 +1,5 @@
+
+export const LEVEL_BOUNDARIES = {
+    LEARNING_LEVEL_LIMIT: 5,
+} 
+Object.freeze(LEVEL_BOUNDARIES)
