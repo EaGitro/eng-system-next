@@ -15,3 +15,10 @@ export type Expand<T> =
   ? { [K in keyof O]: Expand<O[K]> }
   : never
   : T;
+
+
+export type Year = `${number}${number}${number}${number}`;
+export type Month = `0${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}` | `1${0 | 1 | 2}`;
+export type Day = `0${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}` | `${1 | 2}${number}` | `3${0 | 1}`;
+
+export type YYYYMMDD = `${Year}-${Month}-${Day}`;

@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 
 export default function LoginButton() {
   return (
-    <button className="w-full" onClick={() => signIn()}>
+    <button className="w-full" onClick={() => signIn() }>
       ログイン
     </button>
   );

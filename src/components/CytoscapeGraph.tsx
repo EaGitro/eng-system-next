@@ -115,16 +115,18 @@ export default async function CytoscapeGraph({ userSynsets, vocabs, relations, j
         <CytoscapeComponent
             elements={elements}
             style={{ width: '1200px', height: '600px' }} // サイズを指定
-            layout={{
-                name: 'fcose',
-                nodeRepulsion: 4500,  // ノード間の反発力を高めてスペースを確保
-                idealEdgeLength: (edge) => edge.data("edgeType") == "lemma2pos" ? 10 : 100,
-                nodeDimensionsIncludeLabels: true, // ラベルを含むノードの寸法を考慮
-                padding: 50,  // グラフ全体の外側の余白
-                spacingFactor: 1.2,  // ノード間の全体的なスペーシングを調整
-                uniformNodeDimensions: false, // ノードごとに異なる寸法を許可
-                avoidOverlap: true // ノードが重ならないように設定
-            }}
+            layout={
+                {
+                    name: 'fcose',
+                    nodeRepulsion: 4500,  // ノード間の反発力を高めてスペースを確保
+                    idealEdgeLength: (edge: any) => edge.data("edgeType") == "lemma2pos" ? 10 : 100,
+                    nodeDimensionsIncludeLabels: true, // ラベルを含むノードの寸法を考慮
+                    padding: 50,  // グラフ全体の外側の余白
+                    spacingFactor: 1.2,  // ノード間の全体的なスペーシングを調整
+                    uniformNodeDimensions: false, // ノードごとに異なる寸法を許可
+                    avoidOverlap: true // ノードが重ならないように設定
+                } as Cytoscape.LayoutOptions
+            }
             stylesheet={[
                 {
                     selector: 'node', // 全ノードに適用されるスタイル
@@ -139,7 +141,7 @@ export default async function CytoscapeGraph({ userSynsets, vocabs, relations, j
                 {
                     selector: 'node[nodeType = "vocab"]', // IDが"vocab"で始まるノード
                     style: {
-                        
+
                     }
                 },
                 {

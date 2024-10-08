@@ -1,11 +1,11 @@
 import { WordData } from "./wordnet";
 
 
-export type WordInfosState = {
+export type WordInfosType = {
     [k:number]: WordData[0]
 } 
 
-export type CardContextType = [
-    WordInfos: WordInfosState,
-    SetWordInfos: React.Dispatch<React.SetStateAction<WordInfosState>>
+export type WordInfosContextType = [
+    WordInfos: WordInfosType,
+    SetWordInfos: React.Dispatch<React.SetStateAction<WordInfosType>>
 ]

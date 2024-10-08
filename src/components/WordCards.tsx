@@ -8,6 +8,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 
 import { createContext, useEffect, useState, useCallback } from "react";
 import { WordInfosContextType, WordInfosType } from "~/app/types/statesContextsTypes";
+import { Button } from "~/components/ui/button";
+import Link from "next/link";
 // import useEmblaCarousel from "embla-carousel-react";
 
 
@@ -38,6 +40,19 @@ export default function WordCards(
             </CarouselItem>
         ));
         console.log(Cards)
+
+        Cards.push(
+            <CarouselItem key={"end"}
+                className="flex items-center justify-center h-full"
+                style={{
+                    height: '100vh',
+                    overflowY: "scroll"
+                }}>
+                <Button className=""><Link href={"/mypage"}>Mypage</Link></Button>
+                <p>TODO: ここに後で今学んだものの graph を表示する</p>
+            </CarouselItem>
+        )
+
         setCardComps(Cards)
         console.log(wordInfos, wordids)
     }, [wordInfos, wordids])
@@ -61,13 +76,13 @@ export default function WordCards(
 
     return (
 
-        <Carousel 
-        style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}
+        <Carousel
+            style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative' }}
         >
             <CarouselContent
-            //  style={{ height: '100%', overflowY: 'auto' }}
-            style={{ height: '100%', display: 'flex' }}
-             >
+                //  style={{ height: '100%', overflowY: 'auto' }}
+                style={{ height: '100%', display: 'flex' }}
+            >
                 <WordInfosContext.Provider value={[wordInfos, setWordInfos]}>
                     {cardComps}
                     {/* {Cards} */}

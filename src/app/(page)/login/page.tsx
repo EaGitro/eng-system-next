@@ -8,6 +8,7 @@ import { signIn, signOut } from "next-auth/react"
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "~/lib/auth";
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 
 
 export default async function Login() {
@@ -19,7 +20,9 @@ export default async function Login() {
                     // console.log(session)
                     <>
                     <LogoutButton></LogoutButton>
-
+                        <Button>
+                            <Link href={"/mypage"}>Mypage</Link>
+                        </Button>
                         {/* <p>{session.user.email}{session.user.id}{session.user.name}</p> */}
                     </>
                 )
