@@ -1,9 +1,9 @@
-import { YYYYMMDD } from "~/app/types/utils"
+import type { YYYYMMDD } from "~/app/types/utils";
 
 export type ContinuousData = {
-    date: YYYYMMDD,
-    learnedVocabs: number,
-    learnedSynsets: number,
-    learnedRelations: number,
-    test: number
-}[]
+	date: YYYYMMDD;
+	learnedVocabs: number;
+	learnedSynsets: number;
+	learnedRelations: number;
+	test: number;
+}[];

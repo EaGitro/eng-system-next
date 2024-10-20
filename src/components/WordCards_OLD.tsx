@@ -1,4 +1,3 @@
-
 // import { PrismaClient } from "@prisma/client";
 // import { getServerSession } from "next-auth";
 // import test from "node:test";
@@ -52,7 +51,7 @@
 //     // console.log(wordData)
 //     const wordData = wordDataJson
 
-//     // wordid has different values for different parts of speech 
+//     // wordid has different values for different parts of speech
 //     const synsets = await wordData.map(async (wordEachPos) => {
 
 //         // prisma
@@ -96,7 +95,7 @@
 //         // for synsets
 //         const synset = wordEachPos.synsets.map(async (synset) => {
 
-//             // prisma 
+//             // prisma
 //             const userSynsetData = await prisma.userSynset.upsert({
 //                 where: {
 //                     userId_synsetId: { // Uniqueキーを指定
@@ -164,8 +163,6 @@
 //         )
 //     })
 //     console.log(process.env)
-
-
 
 //     return (
 //         <>

@@ -1,5 +1,5 @@
 import exp from "constants";
-import { Expand } from "./utils";
+import type { Expand } from "./utils";
 // type Synset = {
 //     synset_id: string;
 //     definitions: {
@@ -28,57 +28,53 @@ import { Expand } from "./utils";
 //     synsets: Synset[];
 // }>[];
 
-
-export type Pos =  "a" | "r" | "n" | "v"
-
+export type Pos = "a" | "r" | "n" | "v";
 
 type SynsetDef = {
-  [key: string]: {
-    eng: string;
-    jpn: string;
-  };
+	[key: string]: {
+		eng: string;
+		jpn: string;
+	};
 };
 
 type Synonym = {
-  freq: number;
-  word: string;
-  wordid: number;
+	freq: number;
+	word: string;
+	wordid: number;
 };
 
 type Synset = {
-  defs: SynsetDef;
-  examples: Array<{
-    eng: string;
-    jpn: string;
-  }>;
-  freq: number;
-  syno_list: Synonym[];
-  synsetid: string;
+	defs: SynsetDef;
+	examples: Array<{
+		eng: string;
+		jpn: string;
+	}>;
+	freq: number;
+	syno_list: Synonym[];
+	synsetid: string;
 };
 
 type WordEntry = {
-  pos: string; // 'n' for noun, 'v' for verb
-  synsets: Synset[];
-  wordid: number;
+	pos: string; // 'n' for noun, 'v' for verb
+	synsets: Synset[];
+	wordid: number;
 };
 
 export type WordData = Expand<WordEntry[]>;
 
-
 export type WnjpId2Words = {
-  [wordid: number]: {
-    word: string,
-    pos: "a" | "r" | "n" | "v"
-  }
-}
+	[wordid: number]: {
+		word: string;
+		pos: "a" | "r" | "n" | "v";
+	};
+};
 // DEPLICATED
 // export type WnjpId2Synsets = {
 //   [synsetid: string]: { "eng": string, "jpn": string }[]
 // }
 
 export type WnjpId2JpnSynos = {
-  [synsetid: string]: string[]
-}
- 
-// export type WnjpId2Entity = { Words: Words, Synsets: Synsets }
+	[synsetid: string]: string[];
+};
 
+// export type WnjpId2Entity = { Words: Words, Synsets: Synsets }
