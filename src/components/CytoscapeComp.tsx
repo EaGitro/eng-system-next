@@ -1,5 +1,4 @@
 import cytoscape from "cytoscape";
-import { listeners } from "process";
 import { type CSSProperties, useEffect, useRef } from "react";
 
 /**

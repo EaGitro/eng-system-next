@@ -6,7 +6,6 @@ import type {
 } from "@prisma/client";
 import Cytoscape from "cytoscape";
 import fcose from "cytoscape-fcose";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { CytoscapeCompProps } from "~/app/types/CytoscapeComp";
 import type { LemmaNode, VocabNode } from "~/app/types/GraphTypes";

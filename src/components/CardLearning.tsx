@@ -54,6 +54,7 @@ export default async function CardLearning({
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(wordList),
+			next: { revalidate: 86400 }
 		})
 	).json();
 

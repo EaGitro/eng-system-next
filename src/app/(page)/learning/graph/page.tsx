@@ -51,6 +51,7 @@ export default async function Graph() {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(vocab.map((x) => x.wordId)),
+			next: { revalidate: 86400 }
 		},
 	).then((x) => x.json());
 
@@ -73,6 +74,7 @@ export default async function Graph() {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ synsetids: userSynset.map((x) => x.synsetId) }),
+			next: { revalidate: 86400 }
 		},
 	).then((x) => x.json());
 
