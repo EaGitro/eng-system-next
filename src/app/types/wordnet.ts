@@ -58,6 +58,7 @@ type WordEntry = {
 	pos: string; // 'n' for noun, 'v' for verb
 	synsets: Synset[];
 	wordid: number;
+	word: string;
 };
 
 export type WordData = Expand<WordEntry[]>;

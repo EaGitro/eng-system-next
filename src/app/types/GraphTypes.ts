@@ -4,6 +4,7 @@ export type LemmaNode = {
 		label: string;
 		lemma: string;
 		nodeType: "lemma";
+		wordids: number[]
 	};
 };
 

@@ -12,6 +12,7 @@ import {
 } from "./ui/carousel";
 
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
+import { nextFetchCache } from "~/rules/fetchCache";
 
 // = createContext<{
 //     [k: number]: WordData[0]
@@ -54,7 +55,7 @@ export default async function CardLearning({
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(wordList),
-			next: { revalidate: 86400 }
+			...nextFetchCache
 		})
 	).json();
 

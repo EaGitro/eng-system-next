@@ -2,28 +2,25 @@ import NextAuth from "next-auth";
 import { getServerSession } from "next-auth/next";
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 // import { SignIn } from "~/components/Signin";
 // import { SignOut } from "~/components/SignOut";
 import LoginButton from "~/components/LoginButton";
 import LogoutButton from "~/components/LogoutButton";
+import { ShadcnH2, ShadcnH4 } from "~/components/shadcnCustomized/Typography";
 import { Button } from "~/components/ui/button";
 import { authOptions } from "~/lib/auth";
 
 export default async function Login() {
 	const session = await getServerSession(authOptions);
+	if (session){
+		redirect("/mypage")
+	}
 	return (
 		<>
-			{session && (
-				// console.log(session)
-				<>
-					<LogoutButton></LogoutButton>
-					<Button>
-						<Link href={"/mypage"}>Mypage</Link>
-					</Button>
-					{/* <p>{session.user.email}{session.user.id}{session.user.name}</p> */}
-				</>
-			)}
-			{!session && <LoginButton></LoginButton>}
+			<ShadcnH4 className="p-4"> 
+				お疲れ様でした。再度ログインする場合は右上のログインボタンからログインしてください。
+			</ShadcnH4>
 		</>
 	);
 	// if (session) {

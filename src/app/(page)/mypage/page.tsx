@@ -21,9 +21,9 @@ export default async function ProtectedPage() {
 
 		if (currentHour >= 5 && currentHour < 12) {
 			return "おはようございます！";
-		} else if (currentHour >= 12 && currentHour < 17) {
+		} else if (currentHour >= 12 && currentHour < 16) {
 			return "こんにちは！";
-		} else if (currentHour >= 17 && currentHour < 21) {
+		} else if (currentHour >= 16 && currentHour < 21) {
 			return "こんばんは！";
 		} else {
 			return "遅くまで頑張ってますね！";
@@ -32,7 +32,7 @@ export default async function ProtectedPage() {
 
 	return (
 		<div className="p-4">
-			<ShadcnH1>英語学習アプリ(仮)</ShadcnH1>
+			{/* <ShadcnH1>英語学習アプリ(仮)</ShadcnH1> */}
 			<ShadcnH2>
 				{getGreeting()} {session.user?.name} さん！
 			</ShadcnH2>
@@ -46,9 +46,6 @@ export default async function ProtectedPage() {
 					<a href="/learning/graph">学習した単語を見る</a>
 				</Button>
 			</ShadcnP>
-			<p>
-				<LogoutButton></LogoutButton>
-			</p>
 		</div>
 	);
 }

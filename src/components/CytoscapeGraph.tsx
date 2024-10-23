@@ -6,7 +6,7 @@ import type {
 } from "@prisma/client";
 import Cytoscape from "cytoscape";
 import fcose from "cytoscape-fcose";
-import { useState } from "react";
+import React, { useState } from "react";
 import type { CytoscapeCompProps } from "~/app/types/CytoscapeComp";
 import type { LemmaNode, VocabNode } from "~/app/types/GraphTypes";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
@@ -19,12 +19,15 @@ import type {
 import CytoscapeComp from "~/components/CytoscapeComp";
 import WordCard from "~/components/WordCard";
 import { ShadcnH2 } from "~/components/shadcnCustomized/Typography";
+import { shadcnH2 } from "~/components/shadcnCustomized/TypographyClassName";
 import {
 	Drawer,
 	DrawerContent,
 	DrawerHeader,
 	DrawerTitle,
 } from "~/components/ui/drawer";
+import { pos2shape } from "~/rules/graph";
+import { pos2color } from "~/utils/color";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
 
 export default function CytoscapeGraph({
@@ -37,11 +40,11 @@ export default function CytoscapeGraph({
 	userSynsets: UserSynset[];
 	vocabs: UserVocab[];
 	relations: UserWordSynsetRelation[];
-	jpnSynos: Expand<WnjpId2JpnSynos>;
+	jpnSynos: WnjpId2JpnSynos;
 	words: Expand<WnjpId2Words>;
 }) {
-	const [wordInfo, setWordInfo] = useState<WordData[0]>();
-	const [nodeData, setNodeData] = useState<VocabNode["data"]>();
+	const [activeWordInfos, setActiveWordInfos] = useState<WordData>();
+	const [nodeData, setNodeData] = useState<LemmaNode["data"]>();
 
 	const [wordInfos, setWordInfos] = useState<WordInfosType>({});
 
@@ -54,22 +57,39 @@ export default function CytoscapeGraph({
 
 	// node 構築
 
-	const lemmaNodes: LemmaNode[] = [];
+
+
+	let lemmaNodeObj: Expand<{
+		[word: string]: {
+			data: LemmaNode["data"]
+		}
+	}> = {}
+
+
+	console.log("vocabs================", vocabs)
 
 	// vocab (品詞べつ)
 	const vocabNodes = vocabs.map((vocab): VocabNode => {
 		const word = words[vocab.wordId].word;
 		const pos = words[vocab.wordId].pos;
 
+		console.log("word===========", word)
+
 		// 品詞は違うが、字形は同じものを表すノードを作る(lemmaNodes)
-		lemmaNodes.push({
-			data: {
-				id: "lemma+" + word,
-				label: word,
-				lemma: word,
-				nodeType: "lemma",
-			},
-		});
+		if (!(lemmaNodeObj[word])) {
+			lemmaNodeObj[word] = {
+				data: {
+					id: "lemma+" + word,
+					label: word,
+					lemma: word,
+					nodeType: "lemma",
+					wordids: [vocab.wordId]
+				},
+
+			};
+		} else {
+			lemmaNodeObj[word].data.wordids.push(vocab.wordId)
+		}
 
 		return {
 			data: {
@@ -82,59 +102,115 @@ export default function CytoscapeGraph({
 		};
 	});
 
-	const synoNodes = userSynsets.map((synset) => {
-		// console.log(jpnSynos[synset.synsetId])
-		return {
-			data: {
-				id: `synset+${synset.synsetId}`, // ユニークなIDを付与
-				label: jpnSynos[synset.synsetId].join(",\n"),
-				nodeType: "syno",
-			},
-		};
-	});
+
+	console.log("lemmanodeobj=============", lemmaNodeObj)
+
+	let lemmaNodes: LemmaNode[] = Object.values(lemmaNodeObj)
+
+
+	console.log("lemmanodes =================", lemmaNodes)
+
+	const synoNodes = userSynsets
+		.filter((synset) => jpnSynos[synset.synsetId].length != 0)
+		.map((synset) => {
+			// console.log(jpnSynos[synset.synsetId])
+
+			let color = "";
+			let shape = ""
+			const lastChar = synset.synsetId.slice(-1) as "n" | "v" | "a" | "r"
+			console.log("synset-slice==================", synset.synsetId.slice(-1), synset.synsetId.slice(-1) == "n")
+			switch (lastChar) {
+				case "n":
+				case "v":
+				case "a":
+				case "r":
+					color = `#${pos2color(lastChar, synset.level)}`
+					shape = pos2shape[lastChar]
+					break;
+				default:
+					color = "white"
+			}
+			console.log(color)
+
+			return {
+				data: {
+					id: `synset+${synset.synsetId}`, // ユニークなIDを付与
+					label: jpnSynos[synset.synsetId].join(",\n"),
+					nodeType: "syno",
+					color: color,
+					shape: shape
+				},
+			};
+		});
+
+		console.log("synoNodes================",synoNodes)
 
 	// edge 構築
-	// word <=> synsets
-	const edges = relations.map((relation) => ({
-		data: {
-			id: `edge+${relation.id}`, // ユニークなIDを付与
-			source: `vocab+${relation.wordId}`, // sourceはvocabノード
-			target: `synset+${relation.synsetId}`, // targetはsynsetノード
-			edgeType: "word2synsets",
-		},
-	}));
+	// // word <=> synsets
+	// const edges = relations.map((relation) => ({
+	// 	data: {
+	// 		id: `edge+${relation.id}`, // ユニークなIDを付与
+	// 		source: `vocab+${relation.wordId}`, // sourceはvocabノード
+	// 		target: `synset+${relation.synsetId}`, // targetはsynsetノード
+	// 		edgeType: "word2synsets",
+	// 	},
+	// }));
 
-	// pos <=> lemma (品詞が違うが同形であるものを結ぶ)
-	const lemma2pos = vocabNodes.map((vocab) => {
-		return {
-			data: {
-				id: `edge+${vocab.data.id}+lemma+${vocab.data.lemma}`, // 'edge+vocab+<wordid>+lemma+<lemma>'
-				source: "lemma+" + vocab.data.lemma,
-				target: vocab.data.id,
-				edgeType: "lemma2pos",
-			},
-		};
-	});
+	// // pos <=> lemma (品詞が違うが同形であるものを結ぶ)
+	// const lemma2pos = vocabNodes.map((vocab) => {
+	// 	return {
+	// 		data: {
+	// 			id: `edge+${vocab.data.id}+lemma+${vocab.data.lemma}`, // 'edge+vocab+<wordid>+lemma+<lemma>'
+	// 			source: "lemma+" + vocab.data.lemma,
+	// 			target: vocab.data.id,
+	// 			edgeType: "lemma2pos",
+	// 		},
+	// 	};
+	// });
+
+	// =========================================
+
+	// lemma <=> synset 
+	const edges = relations
+		.filter((synset) => jpnSynos[synset.synsetId].length != 0)
+		.map((relation) => (
+			{
+				data: {
+					id: `edge+${relation.id}`,
+					source: `lemma+${words[relation.wordId].word}`,
+					target: `synset+${relation.synsetId}`,
+					edgeType: "word2synsets",
+				}
+			}
+		)
+		)
 
 	// Cytoscapeの要素をまとめる
 	const elements = [
-		...vocabNodes,
+		// ...vocabNodes,
 		...synoNodes,
 		...edges,
 		...lemmaNodes,
-		...lemma2pos,
+		// ...lemma2pos,
 	];
 
 	// click events
 
+	console.log(lemmaNodes)
+	console.log(vocabNodes)
+
 	const listeners: CytoscapeCompProps["cyListeners"] = [
 		{
 			events: "click",
-			selector: 'node[nodeType = "vocab"]',
+			selector: 'node[nodeType = "lemma"]',
 			handler: async (e) => {
-				const nodeData_ = e.target._private.data as VocabNode["data"];
-				const wordInfo_ = await fetchWordInfo(nodeData_.wordid);
-				setWordInfo(wordInfo_);
+
+				const nodeData_ = e.target._private.data as LemmaNode["data"];
+				const activeWordInfos_ = nodeData_.wordids.map((wid) => {
+					console.log("fetch active word info ============", wid)
+					return fetchWordInfo(wid);
+				})
+				setActiveWordInfos(await Promise.all(activeWordInfos_));
 				setNodeData(nodeData_);
 				setDrawerOpen(true);
 			},
@@ -146,7 +222,7 @@ export default function CytoscapeGraph({
 			<CytoscapeComp
 				elements={elements}
 				cyListeners={listeners}
-				style={{ width: "1200px", height: "600px" }}
+				style={{ width: "100vw", height: "90vh" }}
 				layout={
 					{
 						name: "fcose",
@@ -184,6 +260,8 @@ export default function CytoscapeGraph({
 							height: "mapData(size, 20, 50, 20px, 50px)",
 							"text-wrap": "wrap", // テキストの折り返しを有効化
 							"text-max-width": "80px", // ラベルの最大幅を設定
+							shape: "data(shape)" as cytoscape.Css.PropertyValueNode<Cytoscape.Css.NodeShape>,
+							"background-color": "data(color)"
 						},
 					},
 					{
@@ -192,7 +270,6 @@ export default function CytoscapeGraph({
 							width: "40px", // サイズを大きくする
 							height: "40px",
 							"background-color": "#64b5f6", // 色も変更可能
-							label: "data(label)",
 						},
 					},
 				]}
@@ -204,28 +281,39 @@ export default function CytoscapeGraph({
 			>
 				<DrawerContent className="mt-24 h-4/6">
 					<DrawerHeader>
-						<DrawerTitle>
-							{
-								<ShadcnH2>
-									{nodeData?.lemma + " (" + wordInfo?.pos + ")"}
-								</ShadcnH2>
-							}
+						<DrawerTitle className={shadcnH2}>
+							{nodeData?.lemma}
 						</DrawerTitle>
 					</DrawerHeader>
-					{nodeData && wordInfo && (
-						<WordCard
-							word={nodeData.lemma}
-							wordInfo={wordInfo}
-							isHovered={true}
-							key={"activedrawer+wordcard+" + nodeData.wordid}
-							isInContext={false}
-							wordInfos={wordInfos}
-							setWordInfos={setWordInfos}
-						/>
-					)}
+					<div
+						style={{ overflowY: "scroll", }}
+
+					>
+						{nodeData && activeWordInfos && activeWordInfos.map((wordInfo) => {
+							console.log("activewordinfos=============", activeWordInfos)
+							return (
+								<React.Fragment
+									// style={{ overflowY: "scroll", }}
+									key={"activedrawer+wordcard+" + wordInfo.wordid}
+								>
+									{/* <ShadcnH2>{`${nodeData.lemma} (${wordInfo.pos})`}</ShadcnH2> */}
+									<WordCard
+										word={nodeData.lemma}
+										wordInfo={wordInfo}
+										isHovered={false}
+
+										isInContext={false}
+										wordInfos={wordInfos}
+										setWordInfos={setWordInfos}
+									/>
+								</React.Fragment>
+							)
+						})
+						}
+					</div>
 				</DrawerContent>
 			</Drawer>
-			,
+
 		</>
 	);
 }

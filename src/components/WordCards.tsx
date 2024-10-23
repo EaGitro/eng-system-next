@@ -67,7 +67,7 @@ export default function WordCards({
 				<CarouselItem
 					key={`CarouselItem+${wid[1]}+${index}`}
 					style={{
-						height: "100vh",
+						// height: "100vh",
 						overflowY: "scroll",
 					}}
 				>
@@ -77,12 +77,14 @@ export default function WordCards({
 				{index >= wordids.length - 1 && (
 					<CarouselItem
 						key={"end"}
-						className="flex items-center justify-center h-full"
+						className="flex items-center justify-center"
 						style={{
-							height: "100vh",
+							// height: "100vh",
 							overflowY: "scroll",
 						}}
 					>
+
+						
 						<Button
 							key={"endbutton"}
 							className=""
@@ -99,8 +101,9 @@ export default function WordCards({
 						>
 							<Link href={"/mypage"}>Mypage</Link>
 						</Button>
-						<p>TODO: ここに後で今学んだものの graph を表示する</p>
+						
 					</CarouselItem>
+					
 				)}
 			</React.Fragment>
 		);
@@ -112,9 +115,9 @@ export default function WordCards({
 		<Carousel
 			style={{
 				width: "100vw",
-				height: "100vh",
-				overflow: "hidden",
-				position: "relative",
+				height: "100%",
+				// overflow: "hidden",
+				// position: "relative",
 			}}
 		>
 			<CarouselContent

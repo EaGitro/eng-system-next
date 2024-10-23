@@ -5,6 +5,7 @@ import CytoscapeComponent from "react-cytoscapejs";
 import type { WnjpId2JpnSynos, WnjpId2Words } from "~/app/types/wordnet";
 import CytoscapeGraph from "~/components/CytoscapeGraph";
 import { authOptions } from "~/lib/auth";
+import { nextFetchCache } from "~/rules/fetchCache";
 
 export default async function Graph() {
 	const session = await getServerSession(authOptions);
@@ -51,7 +52,7 @@ export default async function Graph() {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(vocab.map((x) => x.wordId)),
-			next: { revalidate: 86400 }
+			...nextFetchCache
 		},
 	).then((x) => x.json());
 
@@ -74,7 +75,7 @@ export default async function Graph() {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ synsetids: userSynset.map((x) => x.synsetId) }),
-			next: { revalidate: 86400 }
+			...nextFetchCache
 		},
 	).then((x) => x.json());
 
@@ -82,7 +83,7 @@ export default async function Graph() {
 
 	return (
 		<>
-			<a href="/mypage">MYPAGE へ </a>
+			{/* <a href="/mypage">MYPAGE へ </a> */}
 			<CytoscapeGraph
 				vocabs={vocab}
 				userSynsets={userSynset}

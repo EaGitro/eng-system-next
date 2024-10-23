@@ -151,11 +151,15 @@ export default function WordCard({
 	return (
 		<Card
 			style={
-				isHovered
+				(isHovered
 					? {
-							overflowY: "scroll",
-						}
-					: {}
+						overflowY: "scroll",
+					}
+					: {
+						height:"90vh",
+
+					}
+				)
 			}
 		>
 			{!isHovered && (
