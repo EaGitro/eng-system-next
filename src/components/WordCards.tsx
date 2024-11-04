@@ -1,7 +1,7 @@
 "use client";
 import type { WordData } from "~/app/types/wordnet";
 
-import Link from "next/link";
+import Link from "~/components/Link";
 import { useState } from "react";
 import useSWR from "swr";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
@@ -46,6 +46,8 @@ export default function WordCards({
 				isHovered={false}
 				wordInfos={wordInfos}
 				setWordInfos={setWordInfos}
+				userId={userId}
+				hasTitle={true}
 			/>
 			// <LoadingCard/>
 		) : isLoading ? (
@@ -88,9 +90,9 @@ export default function WordCards({
 						<Button
 							key={"endbutton"}
 							className=""
-							onClick={() => {
+							onClick={async () => {
 								console.log(wordInfos);
-								fetch("/api/user-data/update-all-learnings", {
+								await fetch("/api/user-data/update-all-learnings", {
 									method: "POST",
 									headers: {
 										"Content-Type": "application/json",
@@ -99,7 +101,7 @@ export default function WordCards({
 								});
 							}}
 						>
-							<Link href={"/mypage"}>Mypage</Link>
+							<Link href={"/learning/words"} userId={userId}>学習を終了する</Link>
 						</Button>
 						
 					</CarouselItem>

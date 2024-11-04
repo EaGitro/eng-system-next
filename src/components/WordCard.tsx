@@ -30,6 +30,7 @@ import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import { shadcnH2 } from "~/components/shadcnCustomized/TypographyClassName";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
+import { watchClick } from "~/components/WatchUser";
 
 // TODO: USE usestate FOR FETCHING
 export default function WordCard({
@@ -38,14 +39,16 @@ export default function WordCard({
 	wordInfos,
 	setWordInfos,
 	isHovered = true,
-	isInContext = true,
+	hasTitle,
+	userId,
 }: {
 	word: string;
 	wordInfo: WordData[0];
 	wordInfos: WordInfosType;
 	setWordInfos: Dispatch<SetStateAction<WordInfosType>>;
 	isHovered?: boolean;
-	isInContext?: boolean;
+	hasTitle?: boolean;
+	userId: string
 }) {
 	console.log(word, isHovered);
 
@@ -93,6 +96,7 @@ export default function WordCard({
 						<DrawerTrigger
 							onMouseEnter={() => {
 								updateWordInfos(syno.wordid);
+								watchClick<"wordcard-syno">(userId, "wordcard-syno", { synsetid: synset.synsetid, wordid: syno.wordid })
 							}}
 						>
 							{syno.word}
@@ -114,6 +118,7 @@ export default function WordCard({
 									isHovered={true}
 									wordInfos={wordInfos}
 									setWordInfos={setWordInfos}
+									userId={userId}
 								/>
 							</DrawerContent>
 						)}
@@ -156,13 +161,13 @@ export default function WordCard({
 						overflowY: "scroll",
 					}
 					: {
-						height:"90vh",
+						height: "90vh",
 
 					}
 				)
 			}
 		>
-			{!isHovered && (
+			{hasTitle && (
 				<CardHeader>
 					<ShadcnH2>{word + " (" + wordInfo.pos + ")"}</ShadcnH2>
 				</CardHeader>

@@ -24,11 +24,11 @@ export type UpsertObj<TargetObj> = Expand<{
  * @returns The next level value, capped by LEARNING_LEVEL_LIMIT.
  */
 export const updateLevelLearning: UpdateLevelCallback = (prevLevel: number) => {
-	if (prevLevel + 1 > LEVEL_BOUNDARIES.LEARNING_LEVEL_LIMIT) {
-		return LEVEL_BOUNDARIES.LEARNING_LEVEL_LIMIT;
-	} else {
+	// if (prevLevel + 1 > LEVEL_BOUNDARIES.LEARNING_LEVEL_LIMIT) {
+	// 	return LEVEL_BOUNDARIES.LEARNING_LEVEL_LIMIT;
+	// } else {
 		return prevLevel + 1;
-	}
+	// }
 };
 
 /**

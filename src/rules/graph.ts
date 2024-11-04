@@ -32,4 +32,15 @@ export const pos2shape = {
     n: "round-rectangle",
     a: "diamond",
     r: "tag"
+} as const
+
+
+export const DEFAULT_LEMMA_NODE_SIZE = 80;
+export const DEFAULT_SYNO_NODE_SIZE = 50;
+export const SYNO_NODE_SIZE_SLICE = 15;
+
+export const CY_CLASSES = {
+    invisible: "invisible",
+    active: "active",
+    transparent: "transparent"
 } as const 

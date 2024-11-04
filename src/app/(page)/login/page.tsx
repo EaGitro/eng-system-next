@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import { getServerSession } from "next-auth/next";
 import { signIn, signOut } from "next-auth/react";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 // import { SignIn } from "~/components/Signin";
 // import { SignOut } from "~/components/SignOut";

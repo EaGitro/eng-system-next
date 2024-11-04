@@ -4,11 +4,13 @@ import type {
 	UserVocab,
 	UserWordSynsetRelation,
 } from "@prisma/client";
+import cytoscape from "cytoscape";
 import Cytoscape from "cytoscape";
 import fcose from "cytoscape-fcose";
-import React, { useState } from "react";
+import { edgeServerAppPaths } from "next/dist/build/webpack/plugins/pages-manifest-plugin";
+import React, { useRef, useState } from "react";
 import type { CytoscapeCompProps } from "~/app/types/CytoscapeComp";
-import type { LemmaNode, VocabNode } from "~/app/types/GraphTypes";
+import type { LemmaNode, SynoNode, VocabNode } from "~/app/types/GraphTypes";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import type { Expand } from "~/app/types/utils";
 import type {
@@ -17,6 +19,8 @@ import type {
 	WordData,
 } from "~/app/types/wordnet";
 import CytoscapeComp from "~/components/CytoscapeComp";
+import GraphControlPanel from "~/components/GraphControlPanel";
+import { watchClick } from "~/components/WatchUser";
 import WordCard from "~/components/WordCard";
 import { ShadcnH2 } from "~/components/shadcnCustomized/Typography";
 import { shadcnH2 } from "~/components/shadcnCustomized/TypographyClassName";
@@ -26,7 +30,8 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from "~/components/ui/drawer";
-import { pos2shape } from "~/rules/graph";
+import MultipleSelector, { Option } from "~/components/ui/multiple-selector";
+import { CY_CLASSES, DEFAULT_LEMMA_NODE_SIZE, DEFAULT_SYNO_NODE_SIZE, pos2shape, SYNO_NODE_SIZE_SLICE } from "~/rules/graph";
 import { pos2color } from "~/utils/color";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
 
@@ -36,12 +41,14 @@ export default function CytoscapeGraph({
 	relations,
 	jpnSynos,
 	words,
+	userId,
 }: {
 	userSynsets: UserSynset[];
 	vocabs: UserVocab[];
 	relations: UserWordSynsetRelation[];
 	jpnSynos: WnjpId2JpnSynos;
 	words: Expand<WnjpId2Words>;
+	userId: string
 }) {
 	const [activeWordInfos, setActiveWordInfos] = useState<WordData>();
 	const [nodeData, setNodeData] = useState<LemmaNode["data"]>();
@@ -53,6 +60,8 @@ export default function CytoscapeGraph({
 	// graph の描画
 	// ===============================
 
+
+	const globalCyRef = useRef<cytoscape.Core>()
 	Cytoscape.use(fcose);
 
 	// node 構築
@@ -79,16 +88,19 @@ export default function CytoscapeGraph({
 		if (!(lemmaNodeObj[word])) {
 			lemmaNodeObj[word] = {
 				data: {
-					id: "lemma+" + word,
+					id: `lemma+${word}`,
 					label: word,
 					lemma: word,
 					nodeType: "lemma",
-					wordids: [vocab.wordId]
+					wordids: [vocab.wordId],
+					levels: [vocab.level],
+					active: false,
 				},
 
 			};
 		} else {
 			lemmaNodeObj[word].data.wordids.push(vocab.wordId)
+			lemmaNodeObj[word].data.levels.push(vocab.level)
 		}
 
 		return {
@@ -98,10 +110,19 @@ export default function CytoscapeGraph({
 				lemma: word,
 				wordid: vocab.wordId,
 				nodeType: "vocab",
+				level: vocab.level,
+				active: false
 			},
 		};
 	});
 
+
+	const multipleSelectorOpts: Expand<Option[]> = Object.keys(lemmaNodeObj).map((lemma) => {
+		return {
+			value: lemmaNodeObj[lemma].data.id,
+			label: lemma
+		}
+	})
 
 	console.log("lemmanodeobj=============", lemmaNodeObj)
 
@@ -110,7 +131,7 @@ export default function CytoscapeGraph({
 
 	console.log("lemmanodes =================", lemmaNodes)
 
-	const synoNodes = userSynsets
+	const synoNodes: SynoNode[] = userSynsets
 		.filter((synset) => jpnSynos[synset.synsetId].length != 0)
 		.map((synset) => {
 			// console.log(jpnSynos[synset.synsetId])
@@ -138,12 +159,14 @@ export default function CytoscapeGraph({
 					label: jpnSynos[synset.synsetId].join(",\n"),
 					nodeType: "syno",
 					color: color,
-					shape: shape
+					shape: shape,
+					level: synset.level,
+					active: false
 				},
 			};
 		});
 
-		console.log("synoNodes================",synoNodes)
+	console.log("synoNodes================", synoNodes)
 
 	// edge 構築
 	// // word <=> synsets
@@ -204,8 +227,8 @@ export default function CytoscapeGraph({
 			events: "click",
 			selector: 'node[nodeType = "lemma"]',
 			handler: async (e) => {
-
-				const nodeData_ = e.target._private.data as LemmaNode["data"];
+				console.log("node target ====", e);
+				const nodeData_ = e.target.data() as LemmaNode["data"];
 				const activeWordInfos_ = nodeData_.wordids.map((wid) => {
 					console.log("fetch active word info ============", wid)
 					return fetchWordInfo(wid);
@@ -213,29 +236,160 @@ export default function CytoscapeGraph({
 				setActiveWordInfos(await Promise.all(activeWordInfos_));
 				setNodeData(nodeData_);
 				setDrawerOpen(true);
+
+
+				const connectedEdges = e.target.connectedEdges()
+				console.log("connectedEdges======", connectedEdges);
+				const connectedEdgeData = connectedEdges.map((edge: any) => {
+					console.log("edge._private============", edge._private)
+					return edge.data()
+				})
+
+				const connectedNodes = connectedEdges.connectedNodes()
+				console.log("connectedNodes()", connectedNodes)
+				const connectedNodeData = connectedNodes.map((node: any) => {
+					console.log("connectedNode", node)
+					return node.data()
+				})
+				watchClick<"graph-syno">(userId, "graph-syno", { connNodes: connectedNodeData, nodeData: nodeData_ })
+				const target = e.target;
+				// activateTarget(target)
+
+				console.log("classes===========")
 			},
+		},
+
+		// {
+		// 	events: "click",
+		// 	selector: 'node[nodeType = "syno"]',
+		// 	handler: async (e) => {
+		// 		activateTarget(e.target)
+		// 	}
+		// },
+		{
+			events: "mouseover",
+			selector: "node",
+			handler: (e) => {
+				console.log("mouseover==========")
+				const target = e.target;
+				const connEdges = target.connectedEdges();
+				const connNodes = connEdges.connectedNodes();
+				console.log(connEdges, connNodes)
+				// console.log(connNodes.classes())
+				e.cy.batch(() => {
+					target.addClass(CY_CLASSES.active);
+					connEdges.addClass(CY_CLASSES.active);
+					connNodes.addClass(CY_CLASSES.active);
+				})
+			}
+		},
+		{
+			events: "mouseout",
+			selector: "node",
+			handler: (e) => {
+				console.log("mouseout===========")
+				e.cy.batch(() => {
+					e.cy.elements().removeClass(CY_CLASSES.active)
+				})
+			}
 		},
 	];
 
 	return (
 		<>
+			<div className={"relative"}>
+				<GraphControlPanel
+					className={"absolute top-0 right-0 z-10"}
+					multipleSelectorDefaultOptions={multipleSelectorOpts}
+					multipleSelectorOnChange={(opts) => {
+						if (!globalCyRef.current) return;
+						if (opts.length != 0) {
+							const lastopt = opts.at(-1) as Option;
+							globalCyRef.current.elements().addClass(CY_CLASSES.transparent)
+							opts.forEach((opt) => {
+								const targetNode = globalCyRef.current?.elements(`[id="${opt.value}"]`)
+								if (!targetNode || !globalCyRef.current) return;
+								targetNode.removeClass(CY_CLASSES.transparent)
+								const stack = globalCyRef.current.collection();
+								const visited = globalCyRef.current.collection();
+								stack.merge(targetNode);
+								visited.merge(targetNode);
+								while (stack.length != 0) {
+									const target = stack.slice(-1);
+									stack.unmerge(target);
+									visited.merge(target);
+									target.removeClass(CY_CLASSES.transparent);
+									target.connectedEdges().removeClass(CY_CLASSES.transparent)
+									const neighbor = target.neighborhood()
+									stack.merge(neighbor.unmerge(visited))
+									console.log("recursive===========", neighbor)
+								}
+
+							})
+							const centerEle = globalCyRef.current?.elements(`[id = "${lastopt.value}"]`);
+							const connEdge = centerEle?.connectedEdges()
+
+
+							// centerEle?.removeClass(CY_CLASSES.transparent)
+							// connEdge?.removeClass(CY_CLASSES.transparent)
+
+							globalCyRef.current?.fit(connEdge?.union(`[id = "${lastopt.value}"]`),);
+						} else {
+							globalCyRef.current?.elements().removeClass(CY_CLASSES.transparent);
+							// globalCyRef.current?.fit();
+						}
+					}}
+				/>
+			</div>
 			<CytoscapeComp
 				elements={elements}
 				cyListeners={listeners}
 				style={{ width: "100vw", height: "90vh" }}
 				layout={
 					{
-						name: "fcose",
-						nodeRepulsion: 4500, // ノード間の反発力を高めてスペースを確保
-						idealEdgeLength: (edge: any) =>
-							edge.data("edgeType") == "lemma2pos" ? 2 : 100,
+						idealEdgeLength: () => 80,
+						// 	edge.data("edgeType") == "lemma2pos" ? 2 : 100,
 						nodeDimensionsIncludeLabels: true, // ラベルを含むノードの寸法を考慮
 						padding: 50, // グラフ全体の外側の余白
 						spacingFactor: 1.2, // ノード間の全体的なスペーシングを調整
 						uniformNodeDimensions: false, // ノードごとに異なる寸法を許可
 						avoidOverlap: true, // ノードが重ならないように設定
+
+
+						/**
+						 * fcose
+						 */
+						name: "fcose",
+						nodeRepulsion: (node: any) => {
+							return (node.data().nodeType == "syno") ? 5048576 : 6048576
+						}, // ノード間の反発力を高めてスペースを確保
+						// tile: true,                  // 配置がタイル化されるようにする
+						// packComponents: false,        // 分離したコンポーネントを詰める
+						quality: "default",
+						animate: true,
+						randomise: false,
+						animationDuration: 100,
+						edgeElasticity: 50,
+						gravity: 1,
 					} as cytoscape.LayoutOptions
 				}
+				ready={(e) => {
+					console.log("ready ============");
+					const nodes = e.cy.nodes()
+					nodes.forEach((node, i, eles) => {
+						const nodeData: LemmaNode["data"] | SynoNode["data"] = node.data();
+						const connSize = node.connectedEdges().length;
+						if (nodeData.nodeType == "syno") {
+							node.style({
+								width: DEFAULT_SYNO_NODE_SIZE + connSize * SYNO_NODE_SIZE_SLICE,
+								height: DEFAULT_SYNO_NODE_SIZE + connSize * SYNO_NODE_SIZE_SLICE
+							})
+						}
+					})
+				}}
+				cy={(cy) => {
+					globalCyRef.current = cy
+				}}
 				stylesheet={[
 					{
 						selector: "node", // 全ノードに適用されるスタイル
@@ -258,6 +412,8 @@ export default function CytoscapeGraph({
 							"text-valign": "center", // ラベルの垂直配置
 							width: "mapData(size, 20, 50, 20px, 50px)", // サイズを動的に変更
 							height: "mapData(size, 20, 50, 20px, 50px)",
+							// width: DEFAULT_SYNO_NODE_SIZE,
+							// height: DEFAULT_SYNO_NODE_SIZE,
 							"text-wrap": "wrap", // テキストの折り返しを有効化
 							"text-max-width": "80px", // ラベルの最大幅を設定
 							shape: "data(shape)" as cytoscape.Css.PropertyValueNode<Cytoscape.Css.NodeShape>,
@@ -267,12 +423,50 @@ export default function CytoscapeGraph({
 					{
 						selector: 'node[nodeType = "lemma"]',
 						style: {
-							width: "40px", // サイズを大きくする
-							height: "40px",
+							width: DEFAULT_LEMMA_NODE_SIZE, // サイズを大きくする
+							height: DEFAULT_LEMMA_NODE_SIZE,
+							"text-halign": "center", // ラベルの水平配置
+							"text-valign": "center", // ラベルの垂直配置
 							"background-color": "#64b5f6", // 色も変更可能
 						},
 					},
+
+					{
+						selector: `node.${CY_CLASSES.active}`,
+						style: {
+							"border-width": 2,
+							"border-color": "#ff6347"
+						}
+					},
+					{
+						selector: `edge.${CY_CLASSES.active}`,
+						style: {
+							"line-color": "#ff6347"
+						}
+					},
+					{
+						selector: `.${CY_CLASSES.invisible}`,
+						style: {
+							"visibility": "hidden"
+						}
+					},
+					{
+						selector: `.${CY_CLASSES.transparent}`,
+						style: {
+							'opacity': 0.35,               // 全体の透明度
+							'line-opacity': 0.2,
+						}
+					}
+					// {
+					// 	selector: 'node[active = true]',
+					// 	style: {
+					// 		"background-blacken": -0.5,
+					// 		"border-width": 2,
+					// 		"border-color": "#fdeff2"
+					// 	}
+					// }
 				]}
+				wheelSensitivity={0.6}
 			/>
 			<Drawer
 				open={drawerOpen}
@@ -296,16 +490,18 @@ export default function CytoscapeGraph({
 									// style={{ overflowY: "scroll", }}
 									key={"activedrawer+wordcard+" + wordInfo.wordid}
 								>
-									{/* <ShadcnH2>{`${nodeData.lemma} (${wordInfo.pos})`}</ShadcnH2> */}
-									<WordCard
-										word={nodeData.lemma}
-										wordInfo={wordInfo}
-										isHovered={false}
-
-										isInContext={false}
-										wordInfos={wordInfos}
-										setWordInfos={setWordInfos}
-									/>
+									<div>
+										{/* <ShadcnH2>{`${nodeData.lemma} (${wordInfo.pos})`}</ShadcnH2> */}
+										<WordCard
+											word={nodeData.lemma}
+											wordInfo={wordInfo}
+											isHovered={true}
+											userId={userId}
+											hasTitle={true}
+											wordInfos={wordInfos}
+											setWordInfos={setWordInfos}
+										/>
+									</div>
 								</React.Fragment>
 							)
 						})
@@ -316,4 +512,33 @@ export default function CytoscapeGraph({
 
 		</>
 	);
+}
+
+
+
+function activateTarget(target: cytoscape.AbstractEventObject["target"]) {
+	const connectedEdges = target.connectedEdges();
+	const connectedNodes = connectedEdges.connectedNodes();
+	console.log("activateTarget====", connectedEdges, connectedNodes);
+
+	connectedEdges.forEach((edge: any) => {
+		edge.data()["active"] == true;
+	});
+
+	connectedNodes.forEach((node: any) => {
+		node.data()["active"] == true;
+	});
+
+
+	setTimeout(() => {
+		connectedEdges.forEach((edge: any) => {
+			edge.data()["active"] == false;
+			console.log("edge._private=======", edge._private)
+		});
+		connectedNodes.forEach((node: any) => {
+			node.data()["active"] == false;
+			console.log("node._private=======", node._private)
+		});
+	}, 3000)
+
 }

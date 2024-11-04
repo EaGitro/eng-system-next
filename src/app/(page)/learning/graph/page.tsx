@@ -6,14 +6,15 @@ import type { WnjpId2JpnSynos, WnjpId2Words } from "~/app/types/wordnet";
 import CytoscapeGraph from "~/components/CytoscapeGraph";
 import { authOptions } from "~/lib/auth";
 import { nextFetchCache } from "~/rules/fetchCache";
+import WatchUser  from "~/components/WatchUser";
 
 export default async function Graph() {
 	const session = await getServerSession(authOptions);
 	console.log("===learning graph====", session);
-	// if (!session) {
-	//     // セッションがない場合は `/login` にリダイレクト
-	//     redirect("/login");
-	// }
+	if (!session) {
+	    // セッションがない場合は `/login` にリダイレクト
+	    redirect("/login");
+	}
 	const userId = session?.user.id;
 	const prisma = new PrismaClient();
 	const vocab = await prisma.userVocab.findMany({
@@ -81,8 +82,15 @@ export default async function Graph() {
 
 	console.log({ synsetids: userSynset.map((x) => x.synsetId) });
 
+
+
 	return (
 		<>
+		{
+			session&&(
+				<WatchUser userId={session.user.id}/>
+			)
+		}
 			{/* <a href="/mypage">MYPAGE へ </a> */}
 			<CytoscapeGraph
 				vocabs={vocab}
@@ -90,6 +98,7 @@ export default async function Graph() {
 				relations={userRelation}
 				words={words}
 				jpnSynos={jpnSynos}
+				userId = {userId}
 			/>
 		</>
 	);

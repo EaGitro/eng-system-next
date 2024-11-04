@@ -1,3 +1,5 @@
+import cytoscape from "cytoscape";
+
 export type CytoscapeCompProps = {
 	style: CSSProperties | undefined;
 
@@ -14,7 +16,8 @@ export type CytoscapeCompProps = {
 		events:
 			| cytoscape.CollectionEventName
 			| cytoscape.UserInputDeviceEventName
-			| cytoscape.UserInputDeviceEventNameExt;
+			| cytoscape.UserInputDeviceEventNameExt
+			| cytoscape.GraphEventName
 		selector?: string;
 		handler: cytoscape.EventHandler;
 	}[];

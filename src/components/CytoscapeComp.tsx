@@ -17,6 +17,7 @@ export default function CytoscapeComp({
 	stylesheet,
 	layout,
 	data,
+	ready,
 	zoom = 1,
 	pan = { x: 0, y: 0 },
 	minZoom = 1e-50,
@@ -64,19 +65,21 @@ export default function CytoscapeComp({
 	 */
 	cyListeners?: {
 		events:
-			| cytoscape.CollectionEventName
-			| cytoscape.UserInputDeviceEventName
-			| cytoscape.UserInputDeviceEventNameExt;
+		| cytoscape.CollectionEventName
+		| cytoscape.UserInputDeviceEventName
+		| cytoscape.UserInputDeviceEventNameExt
+		| cytoscape.GraphEventName
 		selector?: string;
 		handler: cytoscape.EventHandler;
 	}[];
 	elements?: cytoscape.ElementDefinition[];
 	stylesheet?:
-		| cytoscape.Stylesheet[]
-		| Promise<cytoscape.Stylesheet[]>
-		| undefined;
+	| cytoscape.Stylesheet[]
+	| Promise<cytoscape.Stylesheet[]>
+	| undefined;
 	layout?: cytoscape.LayoutOptions | undefined;
 	data?: Record<string, any> | undefined;
+	ready?: cytoscape.EventHandler;
 	zoom?: number;
 	pan?: { x: number; y: number };
 	minZoom?: number;
@@ -101,7 +104,6 @@ export default function CytoscapeComp({
 	motionBlurOpacity?: number;
 	wheelSensitivity?: number;
 	pixelRatio?: "auto" | number;
-	extensions?: cytoscape.Ext[];
 }) {
 	const cyElemRef = useRef<HTMLDivElement>(null);
 
@@ -186,7 +188,15 @@ export default function CytoscapeComp({
 			}
 		});
 
+
+		if (cy) {
+			cy(cyInstance);
+		}
+
+		(ready !== undefined) && cyInstance?.ready(ready);
+
 		return () => {
+			cyElemRef && cyInstance.removeAllListeners();
 			cyElemRef &&
 				cyInstance
 					// .current

@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "~/components/Link"
 import { User } from "lucide-react"
 import { Button } from "~/components/ui/button"
 import Image from "next/image";
@@ -24,7 +24,7 @@ export default async function Header({ height }: {
             <Link
                 href="/mypage"
                 className="text-primary hover:text-primary/80 transition-colors"
-
+                userId={session?.user.id}
             >
                 <div
                     style={{
