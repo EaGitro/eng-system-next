@@ -43,4 +43,54 @@ export const CY_CLASSES = {
     invisible: "invisible",
     active: "active",
     transparent: "transparent"
-} as const 
+} as const
+
+
+export const GRAPH_ELEMENTS_DATA = {
+    edge: (
+        relationId: number,
+        word: string,
+        synsetId: string
+    ) => ({
+        id: GRAPH_ELEMENTS_DATA_TEMPLATE.edge.id(relationId),
+        source: GRAPH_ELEMENTS_DATA_TEMPLATE.edge.source(word),
+        target: GRAPH_ELEMENTS_DATA_TEMPLATE.edge.target(synsetId),
+        edgeType: GRAPH_ELEMENTS_DATA_TEMPLATE.edge.edgeType,
+    } as const),
+
+    synoNode: (
+        synsetId: string,
+        jpnSynos: string[],
+        color: string,
+        shape: string,
+        level: number,
+        active: boolean
+    ) => ({
+        id: GRAPH_ELEMENTS_DATA_TEMPLATE.synoNode.id(synsetId), // ユニークなIDを付与
+        label: `${jpnSynos.join(",\n")}`,
+        nodeType: GRAPH_ELEMENTS_DATA_TEMPLATE.synoNode.nodeType,
+        color: color,
+        shape: shape,
+        level: level,
+        active: active
+    } as const),
+
+} as const
+
+export const GRAPH_ELEMENTS_DATA_TEMPLATE = {
+    edge: {
+        id: (relationId: number) => `edge+${relationId}` as const,
+        source: (word: string) => `lemma+${word}` as const,
+        target: (synsetId: string) => `synset+${synsetId}` as const,
+        edgeType: "word2synsets" as const,
+    } as const,
+    synoNode: {
+        id: (synsetId: string) => `synset+${synsetId}` as const,
+        nodeType: "syno" as const,
+    } as const,
+
+    lemmaNode: {
+        id: (word: string) => `lemma+${word}` as const,
+        nodeType: "lemma"
+    } as const
+}

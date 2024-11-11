@@ -76,10 +76,21 @@ export function ShadcnP({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode,
+	children: string | JSX.Element | React.ReactNode | string[] | JSX.Element,
 	className?: string
-	style?: React.CSSProperties 
+	style?: React.CSSProperties
 }) {
+	if (Array.isArray(children)) {
+		return (
+			<>
+				{
+					children.map((p, i) => {
+						return <p className={`leading-7 [&:not(:first-child)]:mt-6 ${className}`} key={`ShadcnP-${i}`} style={style}>{p}</p>
+					})
+				}
+			</>
+		)
+	}
 	return <p className={`leading-7 [&:not(:first-child)]:mt-6 ${className}`} style={style}>{children}</p>;
 }
 
@@ -90,7 +101,7 @@ export function ShadcnBlockquote({
 }: {
 	children: string | JSX.Element | React.ReactNode,
 	className?: string
-	style?: React.CSSProperties 
+	style?: React.CSSProperties
 }) {
 	return (
 		<blockquote className={`mt-6 border-l-2 pl-6 italic ${className}`} style={style}>{children}</blockquote>
@@ -128,7 +139,7 @@ export function ShadcnMuted({
 }: {
 	children: string | JSX.Element | React.ReactNode,
 	className?: string
-	style?: React.CSSProperties 
+	style?: React.CSSProperties
 }) {
-	return <p className={`text-sm text-muted-foreground`} style={style}>{children}</p>;
+	return <p className={`text-sm text-muted-foreground ${className}`} style={style}>{children}</p>;
 }

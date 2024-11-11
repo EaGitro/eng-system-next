@@ -8,6 +8,7 @@ import cytoscape from "cytoscape";
 import Cytoscape from "cytoscape";
 import fcose from "cytoscape-fcose";
 import { edgeServerAppPaths } from "next/dist/build/webpack/plugins/pages-manifest-plugin";
+import Link from "next/link";
 import React, { useRef, useState } from "react";
 import type { CytoscapeCompProps } from "~/app/types/CytoscapeComp";
 import type { LemmaNode, SynoNode, VocabNode } from "~/app/types/GraphTypes";
@@ -24,6 +25,7 @@ import { watchClick } from "~/components/WatchUser";
 import WordCard from "~/components/WordCard";
 import { ShadcnH2 } from "~/components/shadcnCustomized/Typography";
 import { shadcnH2 } from "~/components/shadcnCustomized/TypographyClassName";
+import { Button } from "~/components/ui/button";
 import {
 	Drawer,
 	DrawerContent,
@@ -31,7 +33,7 @@ import {
 	DrawerTitle,
 } from "~/components/ui/drawer";
 import MultipleSelector, { Option } from "~/components/ui/multiple-selector";
-import { CY_CLASSES, DEFAULT_LEMMA_NODE_SIZE, DEFAULT_SYNO_NODE_SIZE, pos2shape, SYNO_NODE_SIZE_SLICE } from "~/rules/graph";
+import { CY_CLASSES, DEFAULT_LEMMA_NODE_SIZE, DEFAULT_SYNO_NODE_SIZE, GRAPH_ELEMENTS_DATA, GRAPH_ELEMENTS_DATA_TEMPLATE, pos2shape, SYNO_NODE_SIZE_SLICE } from "~/rules/graph";
 import { pos2color } from "~/utils/color";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
 
@@ -50,6 +52,17 @@ export default function CytoscapeGraph({
 	words: Expand<WnjpId2Words>;
 	userId: string
 }) {
+	// ================
+	// debug
+
+	// const [rerender, setRererender] = useState(false);
+	// ================
+
+	// ================
+	// control panel
+	const [controlFocused, setControlFocused] = useState<Option[]>([])
+	// ================ 
+
 	const [activeWordInfos, setActiveWordInfos] = useState<WordData>();
 	const [nodeData, setNodeData] = useState<LemmaNode["data"]>();
 
@@ -78,7 +91,8 @@ export default function CytoscapeGraph({
 	console.log("vocabs================", vocabs)
 
 	// vocab (品詞べつ)
-	const vocabNodes = vocabs.map((vocab): VocabNode => {
+	// const vocabNodes = 
+	vocabs.forEach((vocab) => {
 		const word = words[vocab.wordId].word;
 		const pos = words[vocab.wordId].pos;
 
@@ -88,10 +102,10 @@ export default function CytoscapeGraph({
 		if (!(lemmaNodeObj[word])) {
 			lemmaNodeObj[word] = {
 				data: {
-					id: `lemma+${word}`,
+					id: GRAPH_ELEMENTS_DATA_TEMPLATE.lemmaNode.id(word),
 					label: word,
 					lemma: word,
-					nodeType: "lemma",
+					nodeType: GRAPH_ELEMENTS_DATA_TEMPLATE.lemmaNode.nodeType,
 					wordids: [vocab.wordId],
 					levels: [vocab.level],
 					active: false,
@@ -103,17 +117,17 @@ export default function CytoscapeGraph({
 			lemmaNodeObj[word].data.levels.push(vocab.level)
 		}
 
-		return {
-			data: {
-				id: `vocab+${vocab.wordId}`,
-				label: word + " (" + pos + ")",
-				lemma: word,
-				wordid: vocab.wordId,
-				nodeType: "vocab",
-				level: vocab.level,
-				active: false
-			},
-		};
+		// return {
+		// 	data: {
+		// 		id: `vocab+${vocab.wordId}`,
+		// 		label: word + " (" + pos + ")",
+		// 		lemma: word,
+		// 		wordid: vocab.wordId,
+		// 		nodeType: "vocab",
+		// 		level: vocab.level,
+		// 		active: false
+		// 	},
+		// };
 	});
 
 
@@ -154,15 +168,24 @@ export default function CytoscapeGraph({
 			console.log(color)
 
 			return {
-				data: {
-					id: `synset+${synset.synsetId}`, // ユニークなIDを付与
-					label: jpnSynos[synset.synsetId].join(",\n"),
-					nodeType: "syno",
-					color: color,
-					shape: shape,
-					level: synset.level,
-					active: false
-				},
+				data: GRAPH_ELEMENTS_DATA.synoNode(
+					synset.synsetId,
+					jpnSynos[synset.synsetId],
+					color,
+					shape,
+					synset.level,
+					false
+				)
+				
+				// {
+				// 	id: `synset+${synset.synsetId}`, // ユニークなIDを付与
+				// 	label: jpnSynos[synset.synsetId].join(",\n"),
+				// 	nodeType: "syno",
+				// 	color: color,
+				// 	shape: shape,
+				// 	level: synset.level,
+				// 	active: false
+				// },
 			};
 		});
 
@@ -198,12 +221,18 @@ export default function CytoscapeGraph({
 		.filter((synset) => jpnSynos[synset.synsetId].length != 0)
 		.map((relation) => (
 			{
-				data: {
-					id: `edge+${relation.id}`,
-					source: `lemma+${words[relation.wordId].word}`,
-					target: `synset+${relation.synsetId}`,
-					edgeType: "word2synsets",
-				}
+				data: GRAPH_ELEMENTS_DATA.edge(
+					relation.id,
+					words[relation.wordId].word,
+					relation.synsetId
+				) 
+				
+				// {
+				// 	id: `edge+${relation.id}`,
+				// 	source: `lemma+${words[relation.wordId].word}`,
+				// 	target: `synset+${relation.synsetId}`,
+				// 	edgeType: "word2synsets",
+				// }
 			}
 		)
 		)
@@ -220,7 +249,7 @@ export default function CytoscapeGraph({
 	// click events
 
 	console.log(lemmaNodes)
-	console.log(vocabNodes)
+	// console.log(vocabNodes)
 
 	const listeners: CytoscapeCompProps["cyListeners"] = [
 		{
@@ -297,6 +326,8 @@ export default function CytoscapeGraph({
 
 	return (
 		<>
+		{/* debug */}
+		{/* <button type="button" onClick={()=>{setRererender((prev)=>!prev)}}>Rerender</button> */}
 			<div className={"relative"}>
 				<GraphControlPanel
 					className={"absolute top-0 right-0 z-10"}
@@ -328,11 +359,6 @@ export default function CytoscapeGraph({
 							})
 							const centerEle = globalCyRef.current?.elements(`[id = "${lastopt.value}"]`);
 							const connEdge = centerEle?.connectedEdges()
-
-
-							// centerEle?.removeClass(CY_CLASSES.transparent)
-							// connEdge?.removeClass(CY_CLASSES.transparent)
-
 							globalCyRef.current?.fit(connEdge?.union(`[id = "${lastopt.value}"]`),);
 						} else {
 							globalCyRef.current?.elements().removeClass(CY_CLASSES.transparent);
@@ -468,6 +494,25 @@ export default function CytoscapeGraph({
 				]}
 				wheelSensitivity={0.6}
 			/>
+			<div className={"relative"}>
+				<Link href={"/mypage"}>
+				<Button
+					className={"absolute bottom-8 right-8"}
+					onClick={async () => {
+						console.log("wordInfos============")
+						console.log(wordInfos)
+						await fetch("/api/user-data/update-all-learnings", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify(wordInfos),
+						});
+					}}>
+					学習を終わる
+				</Button>
+				</Link>
+			</div>
 			<Drawer
 				open={drawerOpen}
 				onOpenChange={setDrawerOpen}

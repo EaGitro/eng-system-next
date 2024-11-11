@@ -1,8 +1,14 @@
 "use client";
+import { CircleHelp } from "lucide-react";
 import { CSSProperties } from "react";
+import { HelpDialog } from "~/components/HelpDialog";
+import { ShadcnH2, ShadcnH3, ShadcnMuted, ShadcnP } from "~/components/shadcnCustomized/Typography";
 import MultipleSelector, { Option } from "~/components/ui/multiple-selector"
 import { cn } from "~/lib/utils";
-
+import Image from "next/image";
+import { shadcnH2, shadcnList } from "~/components/shadcnCustomized/TypographyClassName";
+import GraphHelp from "~/components/GraphHelp";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "~/components/ui/select";
 
 
 export default function GraphControlPanel(
@@ -20,7 +26,7 @@ export default function GraphControlPanel(
 ) {
     return (
         <div className={cn(className)} style={style}>
-            <div className="flex w-full flex-col gap-5 px-10">
+            <div className="flex  flex-col gap-5 px-5 items-end">
                 <MultipleSelector
                     onChange={multipleSelectorOnChange}
                     defaultOptions={multipleSelectorDefaultOptions}
@@ -31,7 +37,9 @@ export default function GraphControlPanel(
                         </p>
                     }
                 />
+                <GraphHelp/>
             </div>
+                    {/* <MultipleSelector/> */}
         </div>
 
     )

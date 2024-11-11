@@ -32,15 +32,15 @@ export default function RootLayout({
 				<body
 					className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col flex-auto`}
 				>
-					<Header
+					{/* <Header
 						height="10vh"
-					/>
+					/> */}
 					<WebVitals />
-					<main
+					{/* <main
 					className="90vh"
-					>
+					> */}
 						{children}
-					</main>
+					{/* </main> */}
 				</body>
 			</NextAuthProvider>
 		</html>

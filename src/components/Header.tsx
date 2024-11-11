@@ -1,3 +1,4 @@
+
 import Link from "~/components/Link"
 import { User } from "lucide-react"
 import { Button } from "~/components/ui/button"
@@ -6,13 +7,35 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "~/lib/auth";
 import LogoutButton from "~/components/LogoutButton";
 import LoginButton from "~/components/LoginButton";
+import { redirect } from "next/navigation";
 
 
-export default async function Header({ height }: {
-    height: string
+export default async function Header({ height,  logoDisabled, logoMsg }: {
+    height: string,
+    logoDisabled?: boolean,
+    logoMsg?: string
 }) {
     const session = await getServerSession(authOptions);
+    const logo = (
+        <div
+            style={{
+                height: "8vh",
+                width: "12vw",
+                position: "relative",
+                cursor: logoDisabled ? "not-allowed" : "pointer"
+            }}
+        // className="flex"
+        >
+            <Image
+                src="/icon-light.svg"
+                alt="Top Image"
+                fill
+                objectFit="contain"
+                sizes="(max-width: 768px) 10vh, (max-width: 1200px) 8vh, 5vh"
 
+            />
+        </div>
+    )
 
 
     return (
@@ -21,28 +44,27 @@ export default async function Header({ height }: {
                 height: height
             }}
         >
-            <Link
-                href="/mypage"
-                className="text-primary hover:text-primary/80 transition-colors"
-                userId={session?.user.id}
-            >
-                <div
-                    style={{
-                        height: "8vh",
-                        width: "12vw",
-                        position: "relative"
-                    }}
-                >
-                    <Image
-                        src="/icon-light.svg" //配置した画像のパスを記述する。
-                        alt="Top Image"
-                        fill
-                        objectFit="contain"
-                        sizes="(max-width: 768px) 10vh, (max-width: 1200px) 8vh, 5vh"
-
-                    />
-                </div>
-            </Link>
+            {
+                (logoDisabled)  ? (
+                    <button
+                        type="button"
+                        className="text-primary hover:text-primary/80 transition-colors"
+                        // onClick={() => {
+                        //     if (!logoDisabled ) {
+                        //         redirect("/mypage")
+                        //     }
+                        // }}
+                        disabled={logoDisabled}
+                        title={logoMsg ? logoMsg : undefined}
+                    >
+                        {logo}
+                    </button>
+                ) : (
+                    <Link href={"/mypage"}>
+                        {logo}
+                    </Link>
+                )
+            }
             {
                 session
                     ? <LogoutButton />
