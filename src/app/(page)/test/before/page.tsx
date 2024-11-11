@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "~/lib/auth";
 
-export async function Page(){
+export default async function TestBeforePage(){
     const session = await getServerSession(authOptions);
 
 	if (!session) {
@@ -10,7 +10,11 @@ export async function Page(){
 		redirect("/login");
 	}
 
-    
+    return(
+        <>
+        <div></div>
+        </>
+    )
 
 
 }
