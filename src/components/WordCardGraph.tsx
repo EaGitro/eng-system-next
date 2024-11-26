@@ -10,7 +10,7 @@
 //     }
 // ){
 //     let synsets:UserSynset[] = []
-//     let words: Expand<WnjpId2Words> = {} 
+//     let words: Expand<WnjpId2Words> = {}
 //     let vocabs: UserVocab[] = []
 //     let relations: UserWordSynsetRelation[] = []
 //     let jpnSynos: WnjpId2JpnSynos = {}

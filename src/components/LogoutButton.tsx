@@ -6,7 +6,12 @@ import { Button } from "~/components/ui/button";
 
 export default function LogoutButton() {
 	return (
-		<Button  onClick={() => {console.log("signOut");return signOut()}}>
+		<Button
+			onClick={() => {
+				console.log("signOut");
+				return signOut();
+			}}
+		>
 			Logout
 		</Button>
 	);

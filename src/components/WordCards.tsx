@@ -1,11 +1,9 @@
 "use client";
-import type { WordData } from "~/app/types/wordnet";
 
-import Link from "~/components/Link";
-import { useState } from "react";
+import React, { useState } from "react";
+
 import useSWR from "swr";
-import type { WordInfosType } from "~/app/types/statesContextsTypes";
-import { Button } from "~/components/ui/button";
+
 import WordCard from "./WordCard";
 import {
 	Carousel,
@@ -15,19 +13,23 @@ import {
 	CarouselPrevious,
 } from "./ui/carousel";
 
-import React from "react";
+import type { WordInfosType } from "~/app/types/statesContextsTypes";
+import type { WordData } from "~/app/types/wordnet";
+
 import { ErrorCard } from "~/components/ErrorCard";
+import Link from "~/components/Link";
 import LoadingCard from "~/components/LoadingCard";
+import { Button } from "~/components/ui/button";
 import { fetcher } from "~/utils/swrFetcher";
 
 export default function WordCards({
-	wordids,
 	defaultWordInfos,
 	userId,
+	wordids,
 }: {
-	wordids: [string, number, string][];
 	defaultWordInfos: WordInfosType;
 	userId: string;
+	wordids: [string, number, string][];
 }) {
 	const [wordInfos, setWordInfos] = useState<WordInfosType>(defaultWordInfos);
 
@@ -40,25 +42,25 @@ export default function WordCards({
 
 		const caroucelSlide = data ? (
 			<WordCard
-				key={`wordcard+${wid[1]}+${index}`}
-				wordInfo={data}
-				word={wid[0]}
+				hasTitle={true}
 				isHovered={false}
-				wordInfos={wordInfos}
+				key={`wordcard+${wid[1]}+${index}`}
 				setWordInfos={setWordInfos}
 				userId={userId}
-				hasTitle={true}
+				word={wid[0]}
+				wordInfo={data}
+				wordInfos={wordInfos}
 			/>
 			// <LoadingCard/>
 		) : isLoading ? (
 			<LoadingCard key={`LoaringCard+${wid[1]}+${index}`} />
 		) : (
 			<ErrorCard
+				errmsg={"An error occurred while fetching the data"}
+				info={error.info}
 				key={`ErrorCard+${wid[1]}+${index}`}
 				status={error.status}
-				errmsg={"An error occurred while fetching the data"}
 				url={error.url}
-				info={error.info}
 			/>
 		);
 
@@ -78,34 +80,32 @@ export default function WordCards({
 
 				{index >= wordids.length - 1 && (
 					<CarouselItem
-						key={"end"}
 						className="flex items-center justify-center"
+						key={"end"}
 						style={{
 							// height: "100vh",
 							overflowY: "scroll",
 						}}
 					>
-
-						
 						<Button
-							key={"endbutton"}
 							className=""
+							key={"endbutton"}
 							onClick={async () => {
 								console.log(wordInfos);
 								await fetch("/api/user-data/update-all-learnings", {
-									method: "POST",
+									body: JSON.stringify(wordInfos),
 									headers: {
 										"Content-Type": "application/json",
 									},
-									body: JSON.stringify(wordInfos),
+									method: "POST",
 								});
 							}}
 						>
-							<Link href={"/learning/words"} userId={userId}>学習を終了する</Link>
+							<Link href={"/learning/words"} userId={userId}>
+								学習を終了する
+							</Link>
 						</Button>
-						
 					</CarouselItem>
-					
 				)}
 			</React.Fragment>
 		);
@@ -116,15 +116,15 @@ export default function WordCards({
 	return (
 		<Carousel
 			style={{
-				width: "100vw",
 				height: "100%",
+				width: "100vw",
 				// overflow: "hidden",
 				// position: "relative",
 			}}
 		>
 			<CarouselContent
 				//  style={{ height: '100%', overflowY: 'auto' }}
-				style={{ height: "100%", display: "flex" }}
+				style={{ display: "flex", height: "100%" }}
 			>
 				{cardComps}
 				{/* {Cards} */}

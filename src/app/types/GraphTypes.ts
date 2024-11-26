@@ -6,21 +6,21 @@ export type LemmaNode = {
 		nodeType: "lemma";
 		wordids: number[];
 		levels: number[];
-		active: boolean
+		active: boolean;
 	};
 };
 
 export type SynoNode = {
 	data: {
-        id: `synset+${string}`;
-        label: string;
-        nodeType: "syno";
-        color: string;
-        shape: string;
-        level: number;
-        active: boolean;
-    };
-}
+		id: `synset+${string}`;
+		label: string;
+		nodeType: "syno";
+		color: string;
+		shape: string;
+		level: number;
+		active: boolean;
+	};
+};
 
 export type VocabNode = {
 	data: {
@@ -30,6 +30,6 @@ export type VocabNode = {
 		wordid: number;
 		nodeType: "vocab";
 		level: number;
-		active: boolean
+		active: boolean;
 	};
 };

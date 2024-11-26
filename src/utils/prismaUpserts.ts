@@ -2,7 +2,6 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import type { Types } from "@prisma/client/runtime/library.js";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import type { Expand } from "~/app/types/utils";
-import { LEVEL_BOUNDARIES } from "~/rules/prisma";
 
 /**
  * take the value of the previous level and return next value of the next level
@@ -27,7 +26,7 @@ export const updateLevelLearning: UpdateLevelCallback = (prevLevel: number) => {
 	// if (prevLevel + 1 > LEVEL_BOUNDARIES.LEARNING_LEVEL_LIMIT) {
 	// 	return LEVEL_BOUNDARIES.LEARNING_LEVEL_LIMIT;
 	// } else {
-		return prevLevel + 1;
+	return prevLevel + 1;
 	// }
 };
 
@@ -82,7 +81,7 @@ export async function updateAllPrismaWithLearning(
 				defaultLevel: 1,
 			}),
 		);
-		for (const synset of wordInfos[wordidStr]["synsets"]) {
+		for (const synset of wordInfos[wordidStr].synsets) {
 			updatedUserSynsetPromises.push(
 				upsertUserSynset(prisma, {
 					target: {

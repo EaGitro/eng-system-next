@@ -50,9 +50,9 @@
 // 	).then((x) => x.json());
 
 // return<></>
-    
+
 // }
 
-export default function Page(){
-	return <div></div>
+export default function Page() {
+	return <div />;
 }

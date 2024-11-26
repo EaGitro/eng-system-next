@@ -1,22 +1,14 @@
-import Header from "~/components/Header"
+import Header from "~/components/Header";
 
 export default function SelectWordsLayout({
-    children,
+	children,
 }: Readonly<{
-    children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-    return (
-        <>
-            <Header
-                height="10vh"
-                logoMsg="ホームへ"
-            />
-            <main
-                className="90vh"
-            >
-                {children}
-            </main>
-
-        </>
-    )
-} 
+	return (
+		<>
+			<Header height="10vh" logoMsg="ホームへ" />
+			<main className="90vh">{children}</main>
+		</>
+	);
+}

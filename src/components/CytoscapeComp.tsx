@@ -65,18 +65,18 @@ export default function CytoscapeComp({
 	 */
 	cyListeners?: {
 		events:
-		| cytoscape.CollectionEventName
-		| cytoscape.UserInputDeviceEventName
-		| cytoscape.UserInputDeviceEventNameExt
-		| cytoscape.GraphEventName
+			| cytoscape.CollectionEventName
+			| cytoscape.UserInputDeviceEventName
+			| cytoscape.UserInputDeviceEventNameExt
+			| cytoscape.GraphEventName;
 		selector?: string;
 		handler: cytoscape.EventHandler;
 	}[];
 	elements?: cytoscape.ElementDefinition[];
 	stylesheet?:
-	| cytoscape.Stylesheet[]
-	| Promise<cytoscape.Stylesheet[]>
-	| undefined;
+		| cytoscape.Stylesheet[]
+		| Promise<cytoscape.Stylesheet[]>
+		| undefined;
 	layout?: cytoscape.LayoutOptions | undefined;
 	data?: Record<string, any> | undefined;
 	ready?: cytoscape.EventHandler;
@@ -188,12 +188,11 @@ export default function CytoscapeComp({
 			}
 		});
 
-
 		if (cy) {
 			cy(cyInstance);
 		}
 
-		(ready !== undefined) && cyInstance?.ready(ready);
+		ready !== undefined && cyInstance?.ready(ready);
 
 		return () => {
 			cyElemRef && cyInstance.removeAllListeners();

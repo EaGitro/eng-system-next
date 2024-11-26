@@ -28,9 +28,9 @@ import {
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
+import { watchClick } from "~/components/WatchUser";
 import { shadcnH2 } from "~/components/shadcnCustomized/TypographyClassName";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
-import { watchClick } from "~/components/WatchUser";
 
 // TODO: USE usestate FOR FETCHING
 export default function WordCard({
@@ -48,7 +48,7 @@ export default function WordCard({
 	setWordInfos: Dispatch<SetStateAction<WordInfosType>>;
 	isHovered?: boolean;
 	hasTitle?: boolean;
-	userId: string
+	userId: string;
 }) {
 	console.log(word, isHovered);
 
@@ -76,10 +76,10 @@ export default function WordCard({
 			const examples: (string | JSX.Element | string[] | JSX.Element[])[] = [];
 			synset.examples.forEach((ex) => {
 				examples.push(
-					<ul className={ShadcnListCss} key={"ul+" + ex.eng}>
+					<ul className={ShadcnListCss} key={`ul+${ex.eng}`}>
 						<li key={ex.eng}>
 							<ShadcnBlockquote>{ex.eng}</ShadcnBlockquote>
-							<ul className={ShadcnListCss} key={"ul+" + ex.jpn}>
+							<ul className={ShadcnListCss} key={`ul+${ex.jpn}`}>
 								<li key={ex.jpn}>
 									<ShadcnBlockquote>{ex.jpn}</ShadcnBlockquote>
 								</li>
@@ -96,7 +96,10 @@ export default function WordCard({
 						<DrawerTrigger
 							onMouseEnter={() => {
 								updateWordInfos(syno.wordid);
-								watchClick<"wordcard-syno">(userId, "wordcard-syno", { synsetid: synset.synsetid, wordid: syno.wordid })
+								watchClick<"wordcard-syno">(userId, "wordcard-syno", {
+									synsetid: synset.synsetid,
+									wordid: syno.wordid,
+								});
 							}}
 						>
 							{syno.word}
@@ -107,7 +110,7 @@ export default function WordCard({
 									<DrawerHeader>
 										<DrawerTitle className={shadcnH2}>
 											{/*<ShadcnH2>*/}
-											{syno.word + " (" + wordInfos[syno.wordid].pos + ")"}
+											{`${syno.word} (${wordInfos[syno.wordid].pos})`}
 											{/* </ShadcnH2> */}
 										</DrawerTitle>
 									</DrawerHeader>
@@ -156,20 +159,18 @@ export default function WordCard({
 	return (
 		<Card
 			style={
-				(isHovered
+				isHovered
 					? {
-						overflowY: "scroll",
-					}
+							overflowY: "scroll",
+						}
 					: {
-						height: "90vh",
-
-					}
-				)
+							height: "90vh",
+						}
 			}
 		>
 			{hasTitle && (
 				<CardHeader>
-					<ShadcnH2>{word + " (" + wordInfo.pos + ")"}</ShadcnH2>
+					<ShadcnH2>{`${word} (${wordInfo.pos})`}</ShadcnH2>
 				</CardHeader>
 			)}
 			<CardContent>{synsetComps}</CardContent>

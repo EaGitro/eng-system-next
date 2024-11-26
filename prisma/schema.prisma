@@ -107,6 +107,66 @@ model UserGroupingTestWordSynsetRelation {
   @@id([relationId, groupTestId])
 }
 
+// ===================
+// 評価テスト
+// ===================
+
+// 評価テストの実施状況
+model PreTestStatus {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id])
+  status Int    @default(0) // 0: テスト未実施, 1: テスト実施中, 2:テスト終了
+}
+
+model PostTestStatus {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id])
+  status Int    @default(0) // 0: テスト未実施, 1: テスト実施中, 2:テスト終了
+}
+
+// 知ってるか 回答
+model PreTestUserAnswerKnowledge {
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  word   String // 全て小文字
+  rate   Int    @default(0) // 0: 未回答, 1: 知らない, 2:見たことはある, 3: 意味わかる, 4: 文の中で使える
+}
+
+model PostTestUserAnswerKnowledge {
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  word   String // 全て小文字
+  rate   Int    @default(0) // 0: 未回答, 1: 知らない, 2:見たことはある, 3: 意味わかる, 4: 文の中で使える
+}
+
+// テスト回答
+model PreTestUserAnswerMatch {
+  id      Int    @id @default(autoincrement())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  word    String // 全て小文字
+  correct Int    @default(0) // 0: 未回答, 1: 正解, 2: 不正解
+}
+
+model PostTestUserAnswerMatch {
+  id      Int    @id @default(autoincrement())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  word    String // 全て小文字
+  correct Int    @default(0) // 0: 未回答, 1: 正解, 2: 不正解
+}
+
+// ==============
+// ユーザ組分け
+// ==============
+model UserGroup {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id])
+  group  Int    @default(0) // 0: 未振り分け, 1: 紙, 2: 比較システム, 3: 本システム
+}
+
 // // ユーザが持つ、語と語の関係を表すデータ。ユーザが獲得した語と語のつながり
 // model UserVocabRelation {
 //   id                       Int                        @id @default(autoincrement())
@@ -166,17 +226,24 @@ model Session {
 }
 
 model User {
-  id                     String                   @id @default(cuid())
-  name                   String?
-  email                  String?                  @unique
-  emailVerified          DateTime?                @map("email_verified")
-  image                  String?
-  accounts               Account[]
-  sessions               Session[]
-  UserVocab              UserVocab[]
-  UserSynset             UserSynset[]
-  UserWordSynsetRelation UserWordSynsetRelation[]
-  UserGroupingTest       UserGroupingTest[]
+  id                          String                        @id @default(cuid())
+  name                        String?
+  email                       String?                       @unique
+  emailVerified               DateTime?                     @map("email_verified")
+  image                       String?
+  accounts                    Account[]
+  sessions                    Session[]
+  UserVocab                   UserVocab[]
+  UserSynset                  UserSynset[]
+  UserWordSynsetRelation      UserWordSynsetRelation[]
+  UserGroupingTest            UserGroupingTest[]
+  PreTestStatus               PreTestStatus[]
+  PostTestStatus              PostTestStatus[]
+  PreTestUserAnswerKnowledge  PreTestUserAnswerKnowledge[]
+  PostTestUserAnswerKnowledge PostTestUserAnswerKnowledge[]
+  PreTestUserAnswerMatch      PreTestUserAnswerMatch[]
+  PostTestUserAnswerMatch     PostTestUserAnswerMatch[]
+  UserGroup                   UserGroup[]
 
   @@map("users")
 }

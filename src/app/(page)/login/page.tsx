@@ -1,23 +1,28 @@
-import NextAuth from "next-auth";
 import { getServerSession } from "next-auth/next";
-import { signIn, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
-// import { SignIn } from "~/components/Signin";
-// import { SignOut } from "~/components/SignOut";
-import LoginButton from "~/components/LoginButton";
-import LogoutButton from "~/components/LogoutButton";
-import { ShadcnH2, ShadcnH4 } from "~/components/shadcnCustomized/Typography";
-import { Button } from "~/components/ui/button";
+import { ShadcnH4 } from "~/components/shadcnCustomized/Typography";
 import { authOptions } from "~/lib/auth";
 
-export default async function Login() {
+export default async function Login({
+	searchParams,
+}: {
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
 	const session = await getServerSession(authOptions);
-	if (session){
-		redirect("/mypage")
+	if (session) {
+		const redirectPath = (await searchParams).redirect;
+		switch (typeof redirectPath) {
+			case "string":
+				redirect(redirectPath);
+			case "undefined":
+				redirect("/mypage");
+			case "object":
+				redirect(redirectPath[0]);
+		}
 	}
 	return (
 		<>
-			<ShadcnH4 className="p-4"> 
+			<ShadcnH4 className="p-4">
 				お疲れ様でした。再度ログインする場合は右上のログインボタンからログインしてください。
 			</ShadcnH4>
 		</>

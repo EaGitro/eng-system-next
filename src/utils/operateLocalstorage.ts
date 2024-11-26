@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-	LocalStorageAllWordinfoKeysKey,
-	LocalstorageWordinfoKey,
-} from "~/app/types/localstorageTypes";
+import type { LocalstorageWordinfoKey } from "~/app/types/localstorageTypes";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import type { WordData } from "~/app/types/wordnet";
 import {
@@ -33,7 +30,7 @@ export function getLocalstorageWordinfo(wordid: number): {
 	const key: LocalstorageWordinfoKey = `${localStorageWordinfokeyPrefix}${wordid}`;
 	const wordInfoStr = localStorage.getItem(key);
 	return {
-		exists: wordInfoStr ? true : false,
+		exists: !!wordInfoStr,
 		wordInfo: wordInfoStr ? JSON.parse(wordInfoStr) : {},
 	};
 }

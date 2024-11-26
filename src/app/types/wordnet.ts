@@ -1,4 +1,3 @@
-import exp from "constants";
 import type { Expand } from "./utils";
 // type Synset = {
 //     synset_id: string;

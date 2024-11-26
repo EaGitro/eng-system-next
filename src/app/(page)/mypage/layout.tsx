@@ -1,21 +1,14 @@
-import Header from "~/components/Header"
+import Header from "~/components/Header";
 
 export default function MypageLayout({
-    children,
+	children,
 }: Readonly<{
-    children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-    return (
-        <>
-            <Header
-                height="10vh"
-            />
-            <main
-                className="90vh"
-            >
-                {children}
-            </main>
-
-        </>
-    )
-} 
+	return (
+		<>
+			<Header height="10vh" />
+			<main className="90vh">{children}</main>
+		</>
+	);
+}

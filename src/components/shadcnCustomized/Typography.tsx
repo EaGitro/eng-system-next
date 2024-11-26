@@ -3,12 +3,15 @@ export function ShadcnH1({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode,
-	className?: string,
-	style?: React.CSSProperties
+	children: string | JSX.Element | React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
 }) {
 	return (
-		<h1 className={`scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl ${className}`} style={style}>
+		<h1
+			className={`scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl ${className}`}
+			style={style}
+		>
 			{children}
 		</h1>
 	);
@@ -19,9 +22,9 @@ export function ShadcnH2({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode,
-	className?: string
-	style?: React.CSSProperties
+	children: string | JSX.Element | React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
 }) {
 	return (
 		<h2
@@ -38,9 +41,9 @@ export function ShadcnH3({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode,
-	className?: string
-	style?: React.CSSProperties
+	children: string | JSX.Element | React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
 }) {
 	return (
 		<h3
@@ -57,9 +60,9 @@ export function ShadcnH4({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode,
-	className?: string
-	style?: React.CSSProperties
+	children: string | JSX.Element | React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
 }) {
 	return (
 		<h4
@@ -76,22 +79,35 @@ export function ShadcnP({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode | string[] | JSX.Element,
-	className?: string
-	style?: React.CSSProperties
+	children: string | JSX.Element | React.ReactNode | string[] | JSX.Element[];
+	className?: string;
+	style?: React.CSSProperties;
 }) {
 	if (Array.isArray(children)) {
 		return (
 			<>
-				{
-					children.map((p, i) => {
-						return <p className={`leading-7 [&:not(:first-child)]:mt-6 ${className}`} key={`ShadcnP-${i}`} style={style}>{p}</p>
-					})
-				}
+				{children.map((p, i) => {
+					return (
+						<p
+							className={`leading-7 [&:not(:first-child)]:mt-6 ${className}`}
+							key={`ShadcnP-${i}`}
+							style={style}
+						>
+							{p}
+						</p>
+					);
+				})}
 			</>
-		)
+		);
 	}
-	return <p className={`leading-7 [&:not(:first-child)]:mt-6 ${className}`} style={style}>{children}</p>;
+	return (
+		<p
+			className={`leading-7 [&:not(:first-child)]:mt-6 ${className}`}
+			style={style}
+		>
+			{children}
+		</p>
+	);
 }
 
 export function ShadcnBlockquote({
@@ -99,12 +115,17 @@ export function ShadcnBlockquote({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode,
-	className?: string
-	style?: React.CSSProperties
+	children: string | JSX.Element | React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
 }) {
 	return (
-		<blockquote className={`mt-6 border-l-2 pl-6 italic ${className}`} style={style}>{children}</blockquote>
+		<blockquote
+			className={`mt-6 border-l-2 pl-6 italic ${className}`}
+			style={style}
+		>
+			{children}
+		</blockquote>
 	);
 }
 
@@ -137,9 +158,13 @@ export function ShadcnMuted({
 	className,
 	style,
 }: {
-	children: string | JSX.Element | React.ReactNode,
-	className?: string
-	style?: React.CSSProperties
+	children: string | JSX.Element | React.ReactNode;
+	className?: string;
+	style?: React.CSSProperties;
 }) {
-	return <p className={`text-sm text-muted-foreground ${className}`} style={style}>{children}</p>;
+	return (
+		<p className={`text-sm text-muted-foreground ${className}`} style={style}>
+			{children}
+		</p>
+	);
 }

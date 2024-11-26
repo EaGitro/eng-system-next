@@ -7,7 +7,12 @@ import { Button } from "~/components/ui/button";
 
 export default function LoginButton() {
 	return (
-		<Button  onClick={() => {console.log("signOut");return signIn()}}>
+		<Button
+			onClick={() => {
+				console.log("signOut");
+				return signIn();
+			}}
+		>
 			Login
 		</Button>
 	);

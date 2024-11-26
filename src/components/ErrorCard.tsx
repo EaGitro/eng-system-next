@@ -9,13 +9,13 @@ import {
 
 export function ErrorCard({
 	errmsg,
-	status,
 	info,
+	status,
 	url,
 }: {
 	errmsg: string;
-	status?: number;
 	info?: string;
+	status?: number;
 	url: string;
 }) {
 	return (

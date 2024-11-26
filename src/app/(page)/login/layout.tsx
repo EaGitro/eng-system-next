@@ -1,22 +1,14 @@
-import Header from "~/components/Header"
+import Header from "~/components/Header";
 
 export default function LoginLayout({
-    children,
+	children,
 }: Readonly<{
-    children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-    return (
-        <>
-            <Header
-                height="10vh"
-
-            />
-            <main
-                className="90vh"
-            >
-                {children}
-            </main>
-
-        </>
-    )
-} 
+	return (
+		<>
+			<Header height="10vh" logoDisabled={true} />
+			<main className="90vh">{children}</main>
+		</>
+	);
+}

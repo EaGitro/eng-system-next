@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import { NextAuthProvider } from "~/providers/NextAuth";
 import "./globals.css";
 import { WebVitals } from "~/components/WebVitals";
-import Header from "~/components/Header";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -39,7 +38,7 @@ export default function RootLayout({
 					{/* <main
 					className="90vh"
 					> */}
-						{children}
+					{children}
 					{/* </main> */}
 				</body>
 			</NextAuthProvider>
