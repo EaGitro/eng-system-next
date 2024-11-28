@@ -42,7 +42,7 @@ export const RadioGroupItem = ({ className, disabled, id, value }: { className?:
 
 	return (
 		<input
-			className={disabled?cn("disabled:cursor-not-allowed disabled:opacity-50",className):className}
+			className={disabled?cn("disabled:cursor-not-allowed disabled:opacity-50",className):cn("cursor-pointer",className)}
 			disabled={disabled}
 			id={id}
 			name={name}

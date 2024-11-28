@@ -1,3 +1,7 @@
+import type { PropsWithChildren } from "react";
+
+import { cn } from "~/lib/utils";
+
 export function ShadcnH1({
 	children,
 	className,
@@ -167,4 +171,18 @@ export function ShadcnMuted({
 			{children}
 		</p>
 	);
+}
+
+
+export function ShadcnInlinecode({
+	children, className, style
+}: PropsWithChildren<{ className?: string, style?: React.CSSProperties }>) {
+	return (
+		<code 
+			className={cn(`relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold`, className)}
+			style={style}
+		>
+			{children}
+		</code>
+	)
 }

@@ -6,6 +6,7 @@ import { RadioGroupContainer, RadioGroupItem } from "~/app/(page)/test/_test-pag
 import { SENTENCE_MATCH_USER_CHOICE_TABLE } from "~/app/(page)/test/_test-page/const";
 import { CustomTableHead } from "~/components/shadcnCustomized/CustomTable";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
+import { cn } from "~/lib/utils";
 
 export default function MatchingTable({
 	className,
@@ -63,25 +64,46 @@ export default function MatchingTable({
 									if (!choice) {
 										return [];
 									}
+									const radiogroupId = `MatchingTable-radio-${word}-${i}`
+									const disabled = (
+										validateCol[`${i}`] == word ||
+										validateCol[`${i}`] == undefined
+									) ? false
+										: true
 									return (
-										<TableCell key={`${word}-${i}`}>
-											<RadioGroupItem
-												disabled={
-													(validateCol[`${i}`] == word ||
-														validateCol[`${i}`] == undefined)
-														? false
-														: true
-												}
-												value={`${word}-${i}`}
-											/>
+										<TableCell className="hover:bg-muted/100" key={`${word}-${i}`}>
+											<div className={cn("w-full h-full") }>
+												<label className={`w-full h-full block py-1  ${disabled?"cursor-not-allowed":"cursor-pointer"}`} htmlFor={radiogroupId}>
+													<RadioGroupItem
+														className={"scale-150"}
+														disabled={disabled}
+														id={radiogroupId}
+														value={`${word}-${i}`}
+													/>
+												</label>
+											</div>
 										</TableCell>
 									);
 								})}
-								<TableCell>
-									<RadioGroupItem value={`${word}-${SENTENCE_MATCH_USER_CHOICE_TABLE.NONE_OF_ABOVE}`} />
+								<TableCell className="hover:bg-muted/100">
+									<div className="w-full h-full">
+										<label className="w-full h-full block cursor-pointer" >
+											<RadioGroupItem 
+												className="scale-150" 
+												value={`${word}-${SENTENCE_MATCH_USER_CHOICE_TABLE.NONE_OF_ABOVE}`}
+											/>
+										</label>
+									</div>
 								</TableCell>
-								<TableCell>
-									<RadioGroupItem value={`${word}-${SENTENCE_MATCH_USER_CHOICE_TABLE.I_DONT_KNOW}`}/>
+								<TableCell className="hover:bg-muted/100">
+									<div className="w-full h-full">
+										<label className="w-full h-full block cursor-pointer" >
+											<RadioGroupItem 
+												className="scale-150" 
+												value={`${word}-${SENTENCE_MATCH_USER_CHOICE_TABLE.I_DONT_KNOW}`}
+											/>
+										</label>
+									</div>
 								</TableCell>
 							</RadioGroupContainer>
 						</TableRow>

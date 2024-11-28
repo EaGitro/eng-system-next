@@ -1,14 +1,14 @@
 "use client";
-import type { WordData } from "~/app/types/wordnet";
 // import React, { useEffect, useState } from 'react';
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-} from "~/components/ui/card";
 
+
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
+
+import type { WordInfosType } from "~/app/types/statesContextsTypes";
+import type { WordData } from "~/app/types/wordnet";
+
+import { watchClick } from "~/components/WatchUser";
 import {
 	ShadcnBlockquote,
 	ShadcnH2,
@@ -17,6 +17,13 @@ import {
 	ShadcnListCss,
 	ShadcnMuted,
 } from "~/components/shadcnCustomized/Typography";
+import { shadcnH2 } from "~/components/shadcnCustomized/TypographyClassName";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+} from "~/components/ui/card";
 import {
 	Drawer,
 	DrawerContent,
@@ -24,31 +31,25 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "~/components/ui/drawer";
-
-import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
-
-import type { WordInfosType } from "~/app/types/statesContextsTypes";
-import { watchClick } from "~/components/WatchUser";
-import { shadcnH2 } from "~/components/shadcnCustomized/TypographyClassName";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
 
 // TODO: USE usestate FOR FETCHING
 export default function WordCard({
+	hasTitle,
+	isHovered = true,
+	setWordInfos,
+	userId,
 	word,
 	wordInfo,
 	wordInfos,
-	setWordInfos,
-	isHovered = true,
-	hasTitle,
-	userId,
 }: {
+	hasTitle?: boolean;
+	isHovered?: boolean;
+	setWordInfos: Dispatch<SetStateAction<WordInfosType>>;
+	userId: string;
 	word: string;
 	wordInfo: WordData[0];
 	wordInfos: WordInfosType;
-	setWordInfos: Dispatch<SetStateAction<WordInfosType>>;
-	isHovered?: boolean;
-	hasTitle?: boolean;
-	userId: string;
 }) {
 	console.log(word, isHovered);
 
@@ -95,6 +96,7 @@ export default function WordCard({
 					<Drawer key={syno.word}>
 						<DrawerTrigger
 							onMouseEnter={() => {
+								console.log("trigger onMouseEnter =====")
 								updateWordInfos(syno.wordid);
 								watchClick<"wordcard-syno">(userId, "wordcard-syno", {
 									synsetid: synset.synsetid,
@@ -102,7 +104,7 @@ export default function WordCard({
 								});
 							}}
 						>
-							{syno.word}
+							<strong>{syno.word}</strong>
 						</DrawerTrigger>
 						{wordInfos[syno.wordid] && (
 							<DrawerContent className="mt-24 h-4/6">
@@ -116,12 +118,12 @@ export default function WordCard({
 									</DrawerHeader>
 								}
 								<WordCard
-									word={syno.word}
-									wordInfo={wordInfos[syno.wordid]}
 									isHovered={true}
-									wordInfos={wordInfos}
 									setWordInfos={setWordInfos}
 									userId={userId}
+									word={syno.word}
+									wordInfo={wordInfos[syno.wordid]}
+									wordInfos={wordInfos}
 								/>
 							</DrawerContent>
 						)}
@@ -161,11 +163,11 @@ export default function WordCard({
 			style={
 				isHovered
 					? {
-							overflowY: "scroll",
-						}
+						overflowY: "scroll",
+					}
 					: {
-							height: "90vh",
-						}
+						height: "90vh",
+					}
 			}
 		>
 			{hasTitle && (

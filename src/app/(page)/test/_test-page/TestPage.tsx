@@ -50,6 +50,7 @@ export default function TestPage({
 	 
 	const [knowledgeRates, setKnoweledgeRates] = useState<KnowledgeRateState>({});
 	 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 	const [matches, setMatches] = useState<UserChoices>({});
 	const [testResult, setTestResult] = useState<TestResult>()
 	const words = wordList;
@@ -145,9 +146,9 @@ export default function TestPage({
 										Thank you for completing the vocabulary quiz!
 									</ShadcnP>
 									<ShadcnP>
-										以下のコードをコピーし、監督者に渡してください。ご協力ありがとうございます。
+										以下のコードをダウンロードまたはコピーし、監督者に渡してください。ご協力ありがとうございます。
 									</ShadcnP>
-									<CpCodeBlock code={JSON.stringify(testResult)} />
+									<CpCodeBlock code={JSON.stringify(testResult)} prePost={prePost} />
 								</div>
 							);
 						default:

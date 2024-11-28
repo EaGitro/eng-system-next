@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { nextFetchCache } from "~/rules/fetchCache";
 
 export async function GET(req: NextRequest) {
@@ -22,7 +23,7 @@ const SynsetidQueryParam = "synid";
 
 type Synset2FreqWordid = {
 	[wordid: string]: {
-		words: { freq: number; wordid: number };
 		sum: number;
+		words: { freq: number; wordid: number };
 	};
 };

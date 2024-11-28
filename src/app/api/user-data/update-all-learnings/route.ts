@@ -1,6 +1,8 @@
-import { getServerSession } from "next-auth";
 import { type NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
+
 import { authOptions } from "~/lib/auth";
 import prisma from "~/lib/prisma";
 import { updateAllPrismaWithLearning } from "~/utils/prismaUpserts";

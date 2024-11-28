@@ -11,9 +11,9 @@ import type { Expand } from "~/app/types/utils";
 export type UpdateLevelCallback = (prevLevel: number) => number;
 
 export type UpsertObj<TargetObj> = Expand<{
+	defaultLevel: number;
 	target: TargetObj;
 	updateLevel: UpdateLevelCallback;
-	defaultLevel: number;
 }>;
 
 /**
@@ -43,9 +43,9 @@ export function createUserObj<TargetObj>(
 	defaultLevel: number,
 ) {
 	return {
+		defaultLevel: defaultLevel,
 		targetObj: targetObj,
 		updateLevel: updateLevelCallback,
-		defaultLevel: defaultLevel,
 	};
 }
 
@@ -73,43 +73,43 @@ export async function updateAllPrismaWithLearning(
 		const wordId = Number(wordidStr);
 		updatedUserVocabsPromises.push(
 			upsertUserVocab(prisma, {
+				defaultLevel: 1,
 				target: {
 					userId: userId,
 					wordId: wordId,
 				},
 				updateLevel: updateLevelLearning,
-				defaultLevel: 1,
 			}),
 		);
 		for (const synset of wordInfos[wordidStr].synsets) {
 			updatedUserSynsetPromises.push(
 				upsertUserSynset(prisma, {
+					defaultLevel: 1,
 					target: {
-						userId: userId,
 						synsetId: synset.synsetid,
+						userId: userId,
 					},
 					updateLevel: updateLevelLearning,
-					defaultLevel: 1,
 				}),
 			);
 
 			updatedUserWordSynsetRelationPromises.push(
 				upsertUserWordSynsetRelation(prisma, {
+					defaultLevel: 1,
 					target: {
+						synsetId: synset.synsetid,
 						userId: userId,
 						wordId: wordId,
-						synsetId: synset.synsetid,
 					},
 					updateLevel: updateLevelLearning,
-					defaultLevel: 1,
 				}),
 			);
 		}
 	}
 
 	return {
-		upsertedUserVocabs: await Promise.all(updatedUserVocabsPromises),
 		upsertedUserSynsets: await Promise.all(updatedUserSynsetPromises),
+		upsertedUserVocabs: await Promise.all(updatedUserVocabsPromises),
 		upsertedUserWordSynsetRelations: await Promise.all(
 			updatedUserWordSynsetRelationPromises,
 		),
@@ -140,16 +140,16 @@ export async function upsertUserVocab(
 	});
 
 	const t = await prisma.userVocab.upsert({
-		where: {
-			userId_wordId: upsertObj.target,
+		create: {
+			level: upsertObj.defaultLevel,
+			userId: upsertObj.target.userId,
+			wordId: upsertObj.target.wordId,
 		},
 		update: {
 			level: upsertObj.updateLevel(oldUserVocab?.level ?? 0),
 		},
-		create: {
-			wordId: upsertObj.target.wordId,
-			userId: upsertObj.target.userId,
-			level: upsertObj.defaultLevel,
+		where: {
+			userId_wordId: upsertObj.target,
 		},
 	});
 	return t;
@@ -168,8 +168,8 @@ export async function upsertUserSynset(
 		Types.Extensions.DefaultArgs
 	>,
 	upsertObj: UpsertObj<{
-		userId: string;
 		synsetId: string;
+		userId: string;
 	}>,
 ) {
 	const oldUserSynset = await prisma.userSynset.findUnique({
@@ -178,16 +178,16 @@ export async function upsertUserSynset(
 		},
 	});
 	const t = await prisma.userSynset.upsert({
-		where: {
-			userId_synsetId: upsertObj.target,
+		create: {
+			level: upsertObj.defaultLevel,
+			synsetId: upsertObj.target.synsetId,
+			userId: upsertObj.target.userId,
 		},
 		update: {
 			level: upsertObj.updateLevel(oldUserSynset?.level ?? 0),
 		},
-		create: {
-			synsetId: upsertObj.target.synsetId,
-			userId: upsertObj.target.userId,
-			level: upsertObj.defaultLevel,
+		where: {
+			userId_synsetId: upsertObj.target,
 		},
 	});
 
@@ -207,9 +207,9 @@ export async function upsertUserWordSynsetRelation(
 		Types.Extensions.DefaultArgs
 	>,
 	upsertObj: UpsertObj<{
+		synsetId: string;
 		userId: string;
 		wordId: number;
-		synsetId: string;
 	}>,
 ) {
 	const oldUserWordSynsetRelation =
@@ -220,17 +220,17 @@ export async function upsertUserWordSynsetRelation(
 		});
 
 	const t = await prisma.userWordSynsetRelation.upsert({
-		where: {
-			userId_wordId_synsetId: upsertObj.target,
+		create: {
+			level: upsertObj.defaultLevel,
+			synsetId: upsertObj.target.synsetId,
+			userId: upsertObj.target.userId,
+			wordId: upsertObj.target.wordId,
 		},
 		update: {
 			level: upsertObj.updateLevel(oldUserWordSynsetRelation?.level ?? 0),
 		},
-		create: {
-			wordId: upsertObj.target.wordId,
-			synsetId: upsertObj.target.synsetId,
-			userId: upsertObj.target.userId,
-			level: upsertObj.defaultLevel,
+		where: {
+			userId_wordId_synsetId: upsertObj.target,
 		},
 	});
 	return t;

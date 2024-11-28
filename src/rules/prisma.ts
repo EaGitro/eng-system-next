@@ -26,7 +26,7 @@ export const TEST = {
 
 export const USER_GROUP = {
 	COMPARISON: 2,
-	PAPER: 1,
-	SYSTEM: 3,
+	PAPER: 3,
+	SYSTEM: 1,
 	UNTOUCHED: 0,
 } as const;

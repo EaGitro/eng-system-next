@@ -78,3 +78,4 @@ export function simpleHash(str: string) {
 }
 
 export const HASED_KEY_STARTTEST = "JJ";
+export const HASHED_KEY_SUBMIT_GROUP = "iM";

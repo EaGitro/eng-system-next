@@ -6,10 +6,6 @@ import Image from "next/image";
 import MatchingTable from "~/app/(page)/test/_test-page/MatchingTable";
 import { TEST_TIMELIMIT_SEC } from "~/app/(page)/test/_test-page/const";
 import {
-	HASED_KEY_STARTTEST,
-	simpleHash,
-} from "~/app/(page)/test/_test-page/secret";
-import {
 	ShadcnH3,
 	ShadcnH4,
 	ShadcnP,
@@ -17,6 +13,10 @@ import {
 import { shadcnList } from "~/components/shadcnCustomized/TypographyClassName";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import {
+	HASED_KEY_STARTTEST,
+	simpleHash,
+} from "~/utils/secret";
 
 export default function Introduction({
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
