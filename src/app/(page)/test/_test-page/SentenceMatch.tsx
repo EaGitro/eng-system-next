@@ -38,7 +38,7 @@ export default function SentenceMatch({
 			))}
 			<TimerTimeLeft
 				handleSubmit={handleSubmit}
-				totalSec={TEST_TIMELIMIT_SEC.WORD_CHECK}
+				totalSec={TEST_TIMELIMIT_SEC.MATCHING}
 			/>
 			<Button
 				className="w-full mt-6"

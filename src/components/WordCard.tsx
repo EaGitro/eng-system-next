@@ -8,6 +8,7 @@ import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import type { WordData } from "~/app/types/wordnet";
 
+import Bouncing from "~/components/Bouncing";
 import { watchClick } from "~/components/WatchUser";
 import {
 	ShadcnBlockquote,
@@ -71,8 +72,8 @@ export default function WordCard({
 		});
 
 		const synsets = wordInfo.synsets;
-		synsets.sort((a, b) => b.freq - a.freq); // sort synsets in descending order
-
+		// synsets.sort((a, b) => b.freq - a.freq); // sort synsets in descending order
+		console.log({synsets})
 		const synsetComps_ = synsets.map((synset) => {
 			const examples: (string | JSX.Element | string[] | JSX.Element[])[] = [];
 			synset.examples.forEach((ex) => {
@@ -96,18 +97,27 @@ export default function WordCard({
 					<Drawer key={syno.word}>
 						<DrawerTrigger
 							onMouseEnter={() => {
+								// console.log("trigger onMouseEnter =====")
+								// updateWordInfos(syno.wordid);
+								// watchClick<"wordcard-syno">(userId, "wordcard-syno", {
+								// 	synsetid: synset.synsetid,
+								// 	wordid: syno.wordid,
+								// });
+							}}
+						>
+							<Bouncing onClick={()=>{
 								console.log("trigger onMouseEnter =====")
 								updateWordInfos(syno.wordid);
 								watchClick<"wordcard-syno">(userId, "wordcard-syno", {
 									synsetid: synset.synsetid,
 									wordid: syno.wordid,
 								});
-							}}
-						>
-							<strong>{syno.word}</strong>
+							}}>
+								<strong>{syno.word}</strong>
+							</Bouncing>
 						</DrawerTrigger>
 						{wordInfos[syno.wordid] && (
-							<DrawerContent className="mt-24 h-4/6">
+							<DrawerContent className="mt-4 h-4/5">
 								{
 									<DrawerHeader>
 										<DrawerTitle className={shadcnH2}>

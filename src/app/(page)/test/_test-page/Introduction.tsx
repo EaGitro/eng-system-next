@@ -115,6 +115,11 @@ export default function Introduction({
 				</li>
 				<li>
 					None of the above 以外は重複して選ぶことが出来ません。
+					<ul className={shadcnList}>
+						<li>
+							もし選択を解除したい場合は一度 None of above を選択してから選んでください
+						</li>
+					</ul>
 				</li>
 				<li>
 					推測をしてもいいですが、当てずっぽうに答えないでください。わからない場合は「わからない」を選択してください。
@@ -139,19 +144,19 @@ export default function Introduction({
 					<li>pencil: 「鉛筆」なので「書くときに使われるもの」</li>
 					<li>shoe: 該当なし</li>
 				</ul>
-				<Image 
-					alt={"answer"} 
-					height={793} 
-					src={"/img/sentence-match-test-ans.PNG"} 
+				<Image
+					alt={"answer"}
+					height={793}
+					src={"/img/sentence-match-test-ans.PNG"}
 					style={{
 						height: "auto",
 						minWidth: 100,
 						width: "100%",
-					}} 
+					}}
 					width={1669}
 				/>
 			</details>
-			<div className="my-4"/>
+			<div className="my-4" />
 			<div>
 				<Input
 					onChange={(e) => setStartPassword(e.target.value)}
