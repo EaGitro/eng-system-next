@@ -111,7 +111,7 @@ export default function Introduction({
 					以下のようなテーブルがあるので、意味が最も近い、単語(縦)と選択肢(横)の正しい組み合わせを選んでください。
 				</li>
 				<li>
-					単語がどの選択肢にも当てはまらないと思ったら、<strong>None fo the above</strong>を選んでください。
+					単語がどの選択肢にも当てはまらないと思ったら、<strong>None of the above</strong>を選んでください。
 				</li>
 				<li>
 					None of the above 以外は重複して選ぶことが出来ません。

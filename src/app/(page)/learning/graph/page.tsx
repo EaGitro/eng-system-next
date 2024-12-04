@@ -1,6 +1,8 @@
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+
 import type { WnjpId2JpnSynos, WnjpId2Words } from "~/app/types/wordnet";
+
 import CytoscapeGraph from "~/components/CytoscapeGraph";
 import WatchUser from "~/components/WatchUser";
 import { authOptions } from "~/lib/auth";
@@ -47,11 +49,11 @@ export default async function Graph() {
 	const words: WnjpId2Words = await fetch(
 		`${process.env.NEXT_PUBLIC_WN_BACKEND_URL}/wordids2words`,
 		{
-			method: "POST",
+			body: JSON.stringify(vocab.map((x) => x.wordId)),
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(vocab.map((x) => x.wordId)),
+			method: "POST",
 			...nextFetchCache,
 		},
 	).then((x) => x.json());
@@ -70,11 +72,11 @@ export default async function Graph() {
 	const jpnSynos: WnjpId2JpnSynos = await fetch(
 		`${process.env.NEXT_PUBLIC_WN_BACKEND_URL}/synsetids2synos`,
 		{
-			method: "POST",
+			body: JSON.stringify({ synsetids: userSynset.map((x) => x.synsetId) }),
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ synsetids: userSynset.map((x) => x.synsetId) }),
+			method: "POST",
 			...nextFetchCache,
 		},
 	).then((x) => x.json());
@@ -86,12 +88,12 @@ export default async function Graph() {
 			{session && <WatchUser userId={session.user.id} />}
 			{/* <a href="/mypage">MYPAGE へ </a> */}
 			<CytoscapeGraph
-				vocabs={vocab}
-				userSynsets={userSynset}
-				relations={userRelation}
-				words={words}
 				jpnSynos={jpnSynos}
+				relations={userRelation}
 				userId={userId}
+				userSynsets={userSynset}
+				vocabs={vocab}
+				words={words}
 			/>
 		</>
 	);
