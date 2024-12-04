@@ -73,7 +73,7 @@ export default function WordCard({
 
 		const synsets = wordInfo.synsets;
 		// synsets.sort((a, b) => b.freq - a.freq); // sort synsets in descending order
-		console.log({synsets})
+		console.log({ synsets })
 		const synsetComps_ = synsets.map((synset) => {
 			const examples: (string | JSX.Element | string[] | JSX.Element[])[] = [];
 			synset.examples.forEach((ex) => {
@@ -105,7 +105,7 @@ export default function WordCard({
 								// });
 							}}
 						>
-							<Bouncing onClick={()=>{
+							<Bouncing onClick={() => {
 								console.log("trigger onMouseEnter =====")
 								updateWordInfos(syno.wordid);
 								watchClick<"wordcard-syno">(userId, "wordcard-syno", {
@@ -153,12 +153,21 @@ export default function WordCard({
 					<CardContent>
 						<ShadcnH4>例:</ShadcnH4>
 						{examples}
-						<ShadcnH4>
-							類義語:<ShadcnMuted>(クリックで詳細)</ShadcnMuted>
-						</ShadcnH4>
-						<div className="flex justify-center items-center gap-4">
-							{synoComps}
-						</div>
+						{(synoComps.length != 0 ? (
+							<>
+								<ShadcnH4>
+									類義語:<ShadcnMuted>(単語をクリックで詳細)</ShadcnMuted>
+								</ShadcnH4>
+								<div className="flex justify-center items-center gap-4">
+									{synoComps}
+								</div>
+							</>
+						) : (
+							<ShadcnH4>
+								類義語:
+							</ShadcnH4>
+						))}
+
 					</CardContent>
 				</Card>
 			);

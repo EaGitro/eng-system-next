@@ -110,6 +110,12 @@ export default [
 					prefer: "type-imports",
 				},
 			],
+
+			/**
+			 * 
+			 */
+			"@typescript-eslint/no-unused-expressions": "off",
+
 			/**
 			 * TypeScriptで型定義にno-unused-varsのエラーが出ないようにする.
 			 */

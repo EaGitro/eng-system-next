@@ -24,7 +24,7 @@ export default async function Header({
 				position: "relative",
 				width: "12vw",
 			}}
-			// className="flex"
+		// className="flex"
 		>
 			<Image
 				alt="Top Image"

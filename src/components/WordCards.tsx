@@ -88,6 +88,7 @@ export default function WordCards({
 						}}
 					>
 						<Button
+							asChild
 							className=""
 							key={"endbutton"}
 							onClick={async () => {
@@ -135,8 +136,8 @@ export default function WordCards({
             <button className="embla__next" onClick={scrollNext}>
                 Next
             </button> */}
-			<CarouselPrevious className="absolute left-0 z-10" size={"icon"} />
-			<CarouselNext className="absolute right-0 z-10" size={"icon"} />
+			<CarouselPrevious className="absolute left-0 z-10 w-16 h-16 opacity-70" size={"icon"} />
+			<CarouselNext className="absolute right-0 z-10 w-16 h-16 opacity-70" size={"icon"} />
 		</Carousel>
 	);
 }

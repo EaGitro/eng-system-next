@@ -1,15 +1,17 @@
 "use client";
-import NextLink from "next/link";
 import type { ComponentProps } from "react";
+
+import NextLink from "next/link";
+
 import { beforeunloadHandlerFunc } from "~/components/WatchUser";
 
 interface CustomLinkProps extends ComponentProps<typeof NextLink> {
 	userId?: string;
 }
 export default function Link({
-	userId,
-	href,
 	children,
+	href,
+	userId,
 	...props
 }: CustomLinkProps) {
 	if (userId)

@@ -42,9 +42,11 @@ export default function CardLearning({
 						className={"flex justify-between items-center ps-2"}
 					>
 						<ShadcnP>ここでは {section.join(", ")} を勉強します</ShadcnP>
-						<Link href={`/learning/words/${i}`} userId={userId}>
-							<Button>Start!</Button>
-						</Link>
+						<Button asChild>
+							<Link href={`/learning/words/${i}`} userId={userId}>
+								Start!
+							</Link>
+						</Button>
 					</AccordionContent>
 				</AccordionItem>
 			))}

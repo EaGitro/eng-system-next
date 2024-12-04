@@ -41,10 +41,12 @@ import {
 	GRAPH_ELEMENTS_DATA,
 	GRAPH_ELEMENTS_DATA_TEMPLATE,
 	pos2shape,
+	SYNO_NODE_SIZE_MAX,
 	SYNO_NODE_SIZE_SLICE,
 } from "~/rules/graph";
 import { pos2color } from "~/utils/color";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
+import { min } from "~/utils/util";
 
 export default function CytoscapeGraph({
 	jpnSynos,
@@ -424,8 +426,8 @@ export default function CytoscapeGraph({
 						if (nodeData.nodeType === "syno") {
 							node.style({
 								height:
-									DEFAULT_SYNO_NODE_SIZE + connSize * SYNO_NODE_SIZE_SLICE,
-								width: DEFAULT_SYNO_NODE_SIZE + connSize * SYNO_NODE_SIZE_SLICE,
+									min(DEFAULT_SYNO_NODE_SIZE + connSize * SYNO_NODE_SIZE_SLICE, SYNO_NODE_SIZE_MAX),
+								width: min(DEFAULT_SYNO_NODE_SIZE + connSize * SYNO_NODE_SIZE_SLICE, SYNO_NODE_SIZE_MAX),
 							});
 						}
 					});

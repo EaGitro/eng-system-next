@@ -56,17 +56,21 @@ export default async function ProtectedPage() {
 					|| userGroup.group == USER_GROUP.COMPARISON
 				) && (
 					<ShadcnP>
-						<Link href={"/learning/words"} userId={session.user.id}>
-							<Button>単語学習へ</Button>
-						</Link>
+						<Button asChild>
+							<Link href={"/learning/words"} userId={session.user.id}>
+								単語学習へ
+							</Link>
+						</Button>
 					</ShadcnP>
 				)
 				}
 				{userGroup.group == USER_GROUP.SYSTEM && (
 					<ShadcnP>
-						<Link href={"/learning/graph"} userId={session.user.id}>
-							<Button>学習した単語を見る</Button>
-						</Link>
+						<Button asChild>
+							<Link href={"/learning/graph"} userId={session.user.id}>
+								学習した単語を見る
+							</Link>
+						</Button>
 					</ShadcnP>
 				)}
 			</div>
