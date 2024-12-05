@@ -1,5 +1,7 @@
-import { getServerSession } from "next-auth/next";
+/* eslint-disable no-fallthrough */
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth/next";
+
 import { ShadcnH4 } from "~/components/shadcnCustomized/Typography";
 import { authOptions } from "~/lib/auth";
 

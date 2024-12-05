@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
 	const groupStr = searchParams.get(SORTING_USER_SEARCHPARAM)
 	const group = Number(groupStr)
-	if (!(group in Object.keys(USER_GROUP))) return NextResponse.json({
+	if (!(group in Object.keys(USER_GROUP)) && group !== 4) return NextResponse.json({
 		group: undefined,
 		message: `Got invalid value "${groupStr}"`,
 		success: false

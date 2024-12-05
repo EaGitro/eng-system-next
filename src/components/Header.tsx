@@ -9,11 +9,13 @@ import { authOptions } from "~/lib/auth";
 export default async function Header({
 	height,
 	logoDisabled,
-	logoMsg,
+	logoLink,
+	logoMsg
 }: {
 	height: string;
 	logoDisabled?: boolean;
-	logoMsg?: string;
+	logoLink?: string;
+	logoMsg?: string
 }) {
 	const session = await getServerSession(authOptions);
 	const logo = (
@@ -45,8 +47,8 @@ export default async function Header({
 		>
 			{logoDisabled ? (
 				<button
-					disabled={logoDisabled}
 					className="text-primary hover:text-primary/80 transition-colors"
+					disabled={logoDisabled}
 					// onClick={() => {
 					//     if (!logoDisabled ) {
 					//         redirect("/mypage")
@@ -58,7 +60,7 @@ export default async function Header({
 					{logo}
 				</button>
 			) : (
-				<Link href={"/mypage"}>{logo}</Link>
+				<Link href={logoLink ?? "/mypage"}>{logo}</Link>
 			)}
 			{session ? <LogoutButton /> : <LoginButton />}
 		</header>

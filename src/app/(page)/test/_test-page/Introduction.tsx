@@ -14,7 +14,7 @@ import { shadcnList } from "~/components/shadcnCustomized/TypographyClassName";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
-	HASED_KEY_STARTTEST,
+	HASHED_KEY_STARTTEST,
 	simpleHash,
 } from "~/utils/secret";
 
@@ -166,7 +166,7 @@ export default function Introduction({
 				/>
 				<Button
 					className="w-full group"
-					disabled={!(HASED_KEY_STARTTEST === simpleHash(startPassword))}
+					disabled={!(HASHED_KEY_STARTTEST === simpleHash(startPassword))}
 					onClick={onStart}
 				>
 					start!

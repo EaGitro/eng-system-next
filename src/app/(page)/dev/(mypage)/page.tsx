@@ -1,20 +1,23 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
+import OperateSessionStorage from "~/app/(page)/dev/_dev/OperateSessionStorage";
 import Link from "~/components/Link";
 import WatchUser from "~/components/WatchUser";
 import { ShadcnH2, ShadcnP } from "~/components/shadcnCustomized/Typography";
 import { Button } from "~/components/ui/button";
 import { authOptions } from "~/lib/auth"; // authOptionsはnext-auth設定をインポート
 import prisma from "~/lib/prisma";
-import { USER_GROUP } from "~/rules/prisma";
+
 
 export default async function ProtectedPage() {
 	const session = await getServerSession(authOptions);
 
 	if (!session) {
 		// セッションがない場合は /login にリダイレクト
-		redirect("/login");
+		const params = new URLSearchParams()
+		params.set("redirect","/dev")
+		redirect(`/login?${params.toString()}`);
 	}
 
 	const userGroup = await prisma.userGroup.findFirst({
@@ -23,12 +26,14 @@ export default async function ProtectedPage() {
 		}
 	})
 
+
+
 	if (!userGroup) {
-		redirect("/user-sorting")
+		redirect("/dev/entry")
 	}
 
-	if(userGroup.group == 4){
-		redirect("/dev")
+	if(userGroup.group < 4){
+		redirect("/mypage")
 	}
 
 	function getGreeting(): string {
@@ -49,6 +54,7 @@ export default async function ProtectedPage() {
 	return (
 		<>
 			{session && <WatchUser userId={session.user.id} />}
+			<OperateSessionStorage/>
 			<div className="p-4">
 				{/* <ShadcnH1>英語学習アプリ(仮)</ShadcnH1> */}
 				<ShadcnH2>
@@ -56,19 +62,16 @@ export default async function ProtectedPage() {
 				</ShadcnH2>
 
 				{(
-					userGroup.group == USER_GROUP.SYSTEM
-					|| userGroup.group == USER_GROUP.COMPARISON
-				) && (
 					<ShadcnP>
 						<Button asChild>
-							<Link href={"/learning/words"} userId={session.user.id}>
+							<Link href={"/dev/learning-words"} userId={session.user.id}>
 								単語学習へ
 							</Link>
 						</Button>
 					</ShadcnP>
 				)
 				}
-				{userGroup.group == USER_GROUP.SYSTEM && (
+				{ (
 					<ShadcnP>
 						<Button asChild>
 							<Link href={"/learning/graph"} userId={session.user.id}>

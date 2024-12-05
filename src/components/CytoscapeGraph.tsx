@@ -445,7 +445,7 @@ export default function CytoscapeGraph({
 						},
 					},
 					{
-						selector: 'node[nodeType = "vocab"]', // IDが"vocab"で始まるノード
+						selector: 'node[nodeType = "vocab"]', 
 						style: {},
 					},
 					{

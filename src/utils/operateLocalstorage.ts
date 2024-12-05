@@ -3,6 +3,7 @@
 import type { LocalstorageWordinfoKey } from "~/app/types/localstorageTypes";
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import type { WordData } from "~/app/types/wordnet";
+
 import {
 	localStorageWordinfokeyPrefix,
 	localStorageWordinfokeyskey,

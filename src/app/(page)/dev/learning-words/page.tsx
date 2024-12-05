@@ -21,8 +21,8 @@ export default async function Words() {
 	})
 
 	if (!userGroup) redirect("/login");
-	if (userGroup.group > 3) {
-		redirect("/dev/learning-words")
+	if (userGroup.group < 4) {
+		redirect("/learning/words")
 	}
 
 	return (

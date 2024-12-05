@@ -28,5 +28,5 @@ export const USER_GROUP = {
 	COMPARISON: 2,
 	PAPER: 3,
 	SYSTEM: 1,
-	UNTOUCHED: 0,
+	UNTOUCHED: 0
 } as const;
