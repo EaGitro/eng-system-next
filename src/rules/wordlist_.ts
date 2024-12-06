@@ -223,100 +223,105 @@ export const CommonWordsAnses: { [word: string]: string }[] = [
 export const OrderedCommonWordsAnses = {
 	"1": [
 		{
-			words: ["birth", "dust", "operation", "row", "sport", "victory"],
 			meanings: ["game", "winning", "being born"],
+			words: ["birth", "dust", "operation", "row", "sport", "victory"],
 		},
 		{
-			words: ["choice", "crop", "flesh", "salary", "secret", "temperature"],
 			meanings: ["heat", "meat", "money paid regularly for doing a job"],
+			words: ["choice", "crop", "flesh", "salary", "secret", "temperature"],
 		},
 		{
-			words: ["cap", "education", "journey", "parent", "scale", "trick"],
 			meanings: [
 				"teaching and learning",
 				"numbers to measure with",
 				"going to a far place",
 			],
+			words: ["cap", "education", "journey", "parent", "scale", "trick"],
 		},
 		{
-			words: ["attack", "charm", "lack", "pen", "shadow", "treasure"],
 			meanings: ["gold and silver", "pleasing quality", "not having something"],
+			words: ["attack", "charm", "lack", "pen", "shadow", "treasure"],
 		},
 		{
-			words: ["adopt", "climb", "examine", "pour", "satisfy", "surround"],
 			meanings: ["go up", "look at closely", "be on every side"],
+			words: ["adopt", "climb", "examine", "pour", "satisfy", "surround"],
 		},
 		{
-			words: ["bake", "connect", "inquire", "limit", "recognize", "wander"],
 			meanings: [
 				"join together",
 				"walk without purpose",
 				"keep within a certain size",
 			],
+			words: ["bake", "connect", "inquire", "limit", "recognize", "wander"],
 		},
 		{
-			words: ["burst", "concern", "deliver", "fold", "improve", "urge"],
 			meanings: ["break open", "make better", "take something to someone"],
+			words: ["burst", "concern", "deliver", "fold", "improve", "urge"],
 		},
 		{
-			words: ["original", "private", "royal", "slow", "sorry", "total"],
 			meanings: ["first ", "not public ", "all added together "],
+			words: ["original", "private", "royal", "slow", "sorry", "total"],
 		},
 	],
 	"2": [
 		{
-			words: ["betray", "dispose", "embrace", "injure", "proclaim", "scare"],
 			meanings: ["frighten", "say publicly", "hurt seriously"],
+			words: ["betray", "dispose", "embrace", "injure", "proclaim", "scare"],
 		},
 		{
-			words: ["encounter", "illustrate", "inspire", "plead", "seal", "shift"],
 			meanings: ["meet", "beg for help", "close completely"],
+			words: ["encounter", "illustrate", "inspire", "plead", "seal", "shift"],
 		},
 		{
-			words: ["assist", "bother", "condemn", "erect", "trim", "whirl"],
 			meanings: ["help", "cut neatly", "spin around quickly"],
+			words: ["assist", "bother", "condemn", "erect", "trim", "whirl"],
 		},
 		{
-			words: ["dim", "junior", "magnificent", "maternal", "odd", "weary"],
 			meanings: ["strange", "wonderful", "not clearly lit"],
+			words: ["dim", "junior", "magnificent", "maternal", "odd", "weary"],
 		},
 	],
 	"3": [
 		{
-			words: ["alcohol", "apron", "hip", "lure", "mess", "phase"],
 			meanings: [
 				"stage of development",
 				"state of untidiness or dirtiness",
 				"cloth worn in front to protect your clothes",
 			],
+			words: ["alcohol", "apron", "hip", "lure", "mess", "phase"],
 		},
 		{
-			words: ["apparatus", "compliment", "ledge", "revenue", "scrap", "tile"],
 			meanings: [
 				"expression of admiration",
 				"set of instruments or machinery",
 				"money received by the government",
 			],
+			words: ["apparatus", "compliment", "ledge", "revenue", "scrap", "tile"],
 		},
 		{
-			words: ["blend", "devise", "hug", "lease", "plague", "reject"],
 			meanings: ["mix together", "plan or invent", "hold tightly in your arms"],
+			words: ["blend", "devise", "hug", "lease", "plague", "reject"],
 		},
 		{
-			words: ["bleed", "collapse", "precede", "reject", "skip", "tease"],
 			meanings: [
 				"come before",
 				"fall down suddenly",
 				"move with quick steps and jumps",
 			],
+			words: ["bleed", "collapse", "precede", "reject", "skip", "tease"],
 		},
 		{
-			words: ["gloomy", "gross", "infinite", "limp", "slim", "vacant"],
 			meanings: ["empty", "dark or sad", "without end"],
+			words: ["gloomy", "gross", "infinite", "limp", "slim", "vacant"],
 		},
 	],
 	"4": [
 		{
+			meanings: [
+				"foolish behavior",
+				"a group of things",
+				"person with a good knowledge of art or music",
+			],
 			words: [
 				"antics",
 				"batch",
@@ -325,13 +330,9 @@ export const OrderedCommonWordsAnses = {
 				"haunch",
 				"scaffold",
 			],
-			meanings: [
-				"foolish behavior",
-				"a group of things",
-				"person with a good knowledge of art or music",
-			],
 		},
 		{
+			meanings: ["ghost", "study of plants", "small pool of water"],
 			words: [
 				"apparition",
 				"botany",
@@ -340,31 +341,30 @@ export const OrderedCommonWordsAnses = {
 				"leash",
 				"puddle",
 			],
-			meanings: ["ghost", "study of plants", "small pool of water"],
 		},
 		{
-			words: ["acquiesce", "bask", "crease", "demolish", "overhaul", "rape"],
 			meanings: [
 				"to accept without protest",
 				"sit or lie enjoying warmth",
 				"make a fold on cloth or paper",
 			],
+			words: ["acquiesce", "bask", "crease", "demolish", "overhaul", "rape"],
 		},
 		{
-			words: ["blaspheme", "endorse", "nurture", "skid", "squint", "straggle"],
 			meanings: [
 				"slip or slide",
 				"give care and food to",
 				"speak badly about God",
 			],
+			words: ["blaspheme", "endorse", "nurture", "skid", "squint", "straggle"],
 		},
 		{
-			words: ["clinch", "jot", "mutilate", "smolder", "topple", "whiz"],
 			meanings: [
 				"move very fast",
 				"injure or damage",
 				"burn slowly without flame",
 			],
+			words: ["clinch", "jot", "mutilate", "smolder", "topple", "whiz"],
 		},
 	],
 };

@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import type { SubmitGroupResponse } from "~/app/(page)/user-sorting/_user-sorting/type";
 
 
-import { HASHED_KEY_DEV_GROUP } from "~/app/(page)/dev/_dev/const";
+import { HASHED_KEY_DEV_GROUP, SESSION_STORAGE_DEV_HASSESSION_KEY } from "~/app/(page)/dev/_dev/const";
 import { ShadcnInlinecode } from "~/components/shadcnCustomized/Typography";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -71,6 +71,7 @@ export default function SubmitGroup({ group }: { group: 4 }) {
                 
 						// 	</Badge>
 						// )
+						sessionStorage.setItem(SESSION_STORAGE_DEV_HASSESSION_KEY, String(Date.now()))
 						redirect("/dev")
 						break;
 
@@ -79,7 +80,7 @@ export default function SubmitGroup({ group }: { group: 4 }) {
 							<div>
 								予期せぬエラーが発生しました
 								<div>
-									got value: <ShadcnInlinecode>{receivedGroup}</ShadcnInlinecode> <hr />
+									got value: <ShadcnInlinecode>{receivedGroup}</ShadcnInlinecode> <br />
 									msg: <ShadcnInlinecode>{errMsg}</ShadcnInlinecode>
 								</div>
 							</div>

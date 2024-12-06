@@ -8,3 +8,4 @@ export const shadcnP = "leading-7 [&:not(:first-child)]:mt-6";
 export const shadcnBlockquote = "mt-6 border-l-2 pl-6 italic";
 export const shadcnList = "my-6 ml-6 list-disc [&>li]:mt-2";
 export const shadcnMuted = "text-sm text-muted-foreground";
+export const shadcnLink = "font-medium text-primary underline underline-offset-4"

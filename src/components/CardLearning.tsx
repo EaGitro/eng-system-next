@@ -1,3 +1,5 @@
+import type { TEST_DATA } from "~/app/(page)/test/_test-page/type";
+
 import Link from "~/components/Link";
 import {
 	ShadcnH2,
@@ -15,11 +17,13 @@ import { WORD_LIST_ORDERED } from "~/rules/wordlist";
 
 export default function CardLearning({
 	userId,
+	wordList
 }: {
 	userId: string;
+	wordList?: TEST_DATA
 }) {
 	// 100 個の単語があるので 10個づつの section に分ける
-	const sections: (readonly string[])[] = WORD_LIST_ORDERED.map(
+	const sections: (readonly string[])[] = (wordList??WORD_LIST_ORDERED).map(
 		(sec) => sec.words,
 	);
 	return (

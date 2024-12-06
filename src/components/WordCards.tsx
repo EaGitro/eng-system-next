@@ -5,13 +5,7 @@ import React, { useState } from "react";
 import useSWR from "swr";
 
 import WordCard from "./WordCard";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from "./ui/carousel";
+
 
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import type { WordData } from "~/app/types/wordnet";
@@ -19,6 +13,15 @@ import type { WordData } from "~/app/types/wordnet";
 import { ErrorCard } from "~/components/ErrorCard";
 import Link from "~/components/Link";
 import LoadingCard from "~/components/LoadingCard";
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	// CarouselNext,
+	// CarouselPrevious,
+	CustomCarouselNext,
+	CustomCarouselPrevious,
+} from "~/components/shadcnCustomized/CustomCarousel";
 import { Button } from "~/components/ui/button";
 import { fetcher } from "~/utils/swrFetcher";
 
@@ -136,8 +139,8 @@ export default function WordCards({
             <button className="embla__next" onClick={scrollNext}>
                 Next
             </button> */}
-			<CarouselPrevious className="absolute left-4 z-10 w-16 h-16 opacity-70 border-double" size={"icon"} />
-			<CarouselNext className="absolute right-4 z-10 w-16 h-16 opacity-70 border-double" size={"icon"} />
+			<CustomCarouselPrevious className="absolute left-4 z-10 w-16 h-16 opacity-70 border-double bg-stone-400" size={"icon"} />
+			<CustomCarouselNext className="absolute right-4 z-10 w-16 h-16 opacity-70 border-double bg-stone-400" size={"icon"} />
 		</Carousel>
 	);
 }

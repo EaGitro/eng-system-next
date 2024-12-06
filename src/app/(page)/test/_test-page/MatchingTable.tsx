@@ -6,7 +6,6 @@ import { RadioGroupContainer, RadioGroupItem } from "~/app/(page)/test/_test-pag
 import { SENTENCE_MATCH_USER_CHOICE_TABLE } from "~/app/(page)/test/_test-page/const";
 import { CustomTableHead } from "~/components/shadcnCustomized/CustomTable";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
-import { cn } from "~/lib/utils";
 
 export default function MatchingTable({
 	className,
@@ -71,17 +70,17 @@ export default function MatchingTable({
 									) ? false
 										: true
 									return (
-										<TableCell className="hover:bg-muted/100" key={`${word}-${i}`}>
-											<div className={cn("w-full h-full") }>
-												<label className={`w-full h-full block py-1  ${disabled?"cursor-not-allowed":"cursor-pointer"}`} htmlFor={radiogroupId}>
-													<RadioGroupItem
-														className={"scale-150"}
-														disabled={disabled}
-														id={radiogroupId}
-														value={`${word}-${i}`}
-													/>
-												</label>
-											</div>
+										<TableCell className="hover:bg-muted/100 p-0" key={`${word}-${i}`}>
+											{/* <div className={cn("w-full h-full") }> */}
+											<label className={`w-full h-full flex items-center justify-center py-2 ${disabled?"cursor-not-allowed":"cursor-pointer"}`} htmlFor={radiogroupId}>
+												<RadioGroupItem
+													className={"scale-150"}
+													disabled={disabled}
+													id={radiogroupId}
+													value={`${word}-${i}`}
+												/>
+											</label>
+											{/* </div> */}
 										</TableCell>
 									);
 								})}

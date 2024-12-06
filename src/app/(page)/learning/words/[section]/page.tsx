@@ -6,7 +6,7 @@ import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import WordCards from "~/components/WordCards";
 import { authOptions } from "~/lib/auth";
 import { nextFetchCache } from "~/rules/fetchCache";
-import { WORD_LIST_ORDERED } from "~/rules/wordlist";
+import { WORD_LIST_ORDERED_EXTENDED } from "~/rules/wordlist";
 
 export default async function Page({
 	params,
@@ -23,7 +23,7 @@ export default async function Page({
 	// const wordList = await (await fetch(url)).json()
 	// const wordList = CommonWords[params.level][Number(params.section) + 1];
 
-	const wordList = WORD_LIST_ORDERED[Number(params.section)].words;
+	const wordList = WORD_LIST_ORDERED_EXTENDED[Number(params.section)].words;
 
 	console.log("level-section-wordlist========", wordList);
 

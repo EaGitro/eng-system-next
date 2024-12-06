@@ -50,7 +50,7 @@ function useCarousel() {
 
 const Carousel = React.forwardRef<
 	HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & CarouselProps
+	React.HTMLAttributes<HTMLDivElement> & CarouselProps
 >(
 	(
 		{
@@ -135,7 +135,7 @@ const Carousel = React.forwardRef<
 					carouselRef,
 					opts,
 					orientation:
-            orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+						orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
 					scrollNext,
 					scrollPrev,
 				}}
@@ -269,7 +269,7 @@ export {
 
 
 
-const KeyControlableCarouselPrevious = React.forwardRef<
+const CustomCarouselPrevious = React.forwardRef<
 	HTMLButtonElement,
 	React.ComponentProps<typeof Button>
 >(({ className, size = "icon", variant = "outline", ...props }, ref) => {
@@ -286,24 +286,25 @@ const KeyControlableCarouselPrevious = React.forwardRef<
 			)}
 			disabled={!canScrollPrev}
 			onClick={scrollPrev}
-			onKeyDown={(e) => {
-				if (e.code == "ArrowRight" || e.code == "KeyA"){
-					scrollPrev()
-				}
-			}}
+			// onKeyDown={(e) => {
+			// 	if (e.code == "ArrowRight" || e.code == "KeyA") {
+			// 		scrollPrev()
+			// 	}
+			// }}
 			ref={ref}
 			size={size}
+			tabIndex={-1}
 			variant={variant}
 			{...props}
 		>
-			<ArrowLeft className="h-4 w-4" />
+			<ArrowLeft className="" size={48} />
 			<span className="sr-only">Previous slide</span>
 		</Button>
 	);
 });
-KeyControlableCarouselPrevious.displayName = "CarouselPrevious";
+CustomCarouselPrevious.displayName = "CustomCarouselPrevious";
 
-const KeyControlableCarouselNext = React.forwardRef<
+const CustomCarouselNext = React.forwardRef<
 	HTMLButtonElement,
 	React.ComponentProps<typeof Button>
 >(({ className, size = "icon", variant = "outline", ...props }, ref) => {
@@ -320,23 +321,24 @@ const KeyControlableCarouselNext = React.forwardRef<
 			)}
 			disabled={!canScrollNext}
 			onClick={scrollNext}
-			onKeyDown={(e) => {
-				if (e.code === "ArrowRight" || e.code === "KeyD") {
-					scrollNext()
-				}
-			}}
+			// onKeyDown={(e) => {
+			// 	if (e.code === "ArrowRight" || e.code === "KeyD") {
+			// 		scrollNext()
+			// 	}
+			// }}
 			ref={ref}
 			size={size}
+			tabIndex={-1}
 			variant={variant}
 			{...props}
 		>
-			<ArrowRight className="h-4 w-4" />
+			<ArrowRight className="" size={48} />
 			<span className="sr-only">Next slide</span>
 		</Button>
 	);
 });
-KeyControlableCarouselNext.displayName = "CarouselNext";
+CustomCarouselNext.displayName = "CustomCarouselNext";
 export {
-	KeyControlableCarouselNext,
-	KeyControlableCarouselPrevious,
+	CustomCarouselNext,
+	CustomCarouselPrevious,
 };

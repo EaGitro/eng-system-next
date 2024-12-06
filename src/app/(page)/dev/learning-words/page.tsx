@@ -5,6 +5,7 @@ import CardLearning from "~/components/CardLearning";
 import WatchUser from "~/components/WatchUser";
 import { authOptions } from "~/lib/auth";
 import prisma from "~/lib/prisma";
+import { WORD_LIST_ORDERED_EXTENDED } from "~/rules/wordlist";
 
 export default async function Words() {
 	const session = await getServerSession(authOptions);
@@ -28,7 +29,7 @@ export default async function Words() {
 	return (
 		<>
 			{session && <WatchUser userId={session.user.id} />}
-			<CardLearning userId={session.user.id} />
+			<CardLearning userId={session.user.id} wordList={WORD_LIST_ORDERED_EXTENDED}/>
 			{/* <a href="/learning/graph">学習を終わる</a> */}
 		</>
 	);

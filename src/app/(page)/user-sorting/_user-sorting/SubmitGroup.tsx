@@ -2,12 +2,14 @@
 import { useState } from "react";
 
 import { Check, Loader } from "lucide-react";
+import Link from "next/link";
 
 import type { SubmitGroupResponse } from "~/app/(page)/user-sorting/_user-sorting/type";
 import type { USER_GROUP } from "~/rules/prisma";
 
 import { USER_GROUP_JAPANESE } from "~/app/(page)/user-sorting/_user-sorting/const";
 import { ShadcnInlinecode } from "~/components/shadcnCustomized/Typography";
+import { shadcnLink } from "~/components/shadcnCustomized/TypographyClassName";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -63,12 +65,17 @@ export default function SubmitGroup({ group }: { group: Exclude<typeof USER_GROU
 
 					case group:
 						return (
-							<Badge
-								variant={"outline"}
+							<div>
+								<Badge
+									variant={"outline"}
 
-							>
-								グループ「{USER_GROUP_JAPANESE[group]}」に正常に組み分けされました <Check />
-							</Badge>
+								>
+									グループ「{USER_GROUP_JAPANESE[group]}」に正常に組み分けされました <Check />
+								</Badge>
+								<Link className={shadcnLink} href={"/mypage"}>
+									マイページへ
+								</Link>
+							</div>
 						)
 
 					default:
