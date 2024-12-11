@@ -3,7 +3,7 @@ export const LEVEL_BOUNDARIES = {
 } as const;
 
 export const TEST = {
-/* eslint-disable sort-keys-custom-order/object-keys */
+	/* eslint-disable sort-keys-custom-order/object-keys */
 	STATUS: {
 		UNTOUCHED: 0,
 		IN_PROGRESS: 1,
@@ -21,12 +21,14 @@ export const TEST = {
 		CORRECT: 1,
 		INCORRECT: 2,
 	} as const,
-/* eslint-enable sort-keys-custom-order/object-keys */
+	/* eslint-enable sort-keys-custom-order/object-keys */
 } as const;
 
 export const USER_GROUP = {
+/* eslint-disable sort-keys-custom-order/object-keys */
+	UNTOUCHED: 0,
+	SYSTEM: 1,
 	COMPARISON: 2,
 	PAPER: 3,
-	SYSTEM: 1,
-	UNTOUCHED: 0
+/* eslint-enable sort-keys-custom-order/object-keys */
 } as const;

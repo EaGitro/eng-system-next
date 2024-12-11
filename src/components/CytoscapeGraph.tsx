@@ -21,6 +21,7 @@ import type {
 	WordData,
 } from "~/app/types/wordnet";
 import type { Option } from "~/components/ui/multiple-selector";
+import type { GraphClick } from "~/rules/clickdata";
 
 import CytoscapeComp from "~/components/CytoscapeComp";
 import GraphControlPanel from "~/components/GraphControlPanel";
@@ -34,6 +35,7 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from "~/components/ui/drawer";
+import { CLICK_TYPE, CLICK_V2_BASEURL, generateTimestamp } from "~/rules/clickdata";
 import {
 	CY_CLASSES,
 	DEFAULT_LEMMA_NODE_SIZE,
@@ -293,6 +295,27 @@ export default function CytoscapeGraph({
 				// activateTarget(target)
 
 				console.log("classes===========");
+
+
+				/**
+				 * watchin user click
+				 */
+				fetch(`${CLICK_V2_BASEURL}/${userId}`,
+					{
+						body: JSON.stringify(
+							{
+								date: generateTimestamp(),
+								path: location.pathname,
+								type: CLICK_TYPE.graph,
+								word: nodeData_.lemma
+							} as GraphClick
+						),
+						headers: {
+							"Content-Type": "application/json",
+						},
+						method: "POST",
+					},
+				)
 			},
 			selector: 'node[nodeType = "lemma"]',
 		},

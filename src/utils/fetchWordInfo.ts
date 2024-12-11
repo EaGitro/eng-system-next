@@ -1,5 +1,6 @@
 "use client";
 import type { WordData } from "~/app/types/wordnet";
+
 import {
 	getLocalstorageWordinfo,
 	setLocalstorageWordinfos,

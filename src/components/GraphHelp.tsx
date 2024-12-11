@@ -132,7 +132,8 @@ export default function GraphHelp() {
 				<Image
 					alt="操作方法"
 					height={480}
-					src={"/img/graph-desc-02.gif"}
+					// src={"/img/graph-desc-02.gif"}
+					src={"/img/graph-desc-full2.gif"}
 					style={{
 						height: "auto",
 						minWidth: 100,

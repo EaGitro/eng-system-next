@@ -7,6 +7,7 @@ import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
 import type { WordInfosType } from "~/app/types/statesContextsTypes";
 import type { WordData } from "~/app/types/wordnet";
+import type { WordCardClick } from "~/rules/clickdata";
 
 import Bouncing from "~/components/Bouncing";
 import { watchClick } from "~/components/WatchUser";
@@ -32,6 +33,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "~/components/ui/drawer";
+import { CLICK_TYPE, CLICK_V2_BASEURL, generateTimestamp } from "~/rules/clickdata";
 import { fetchWordInfo } from "~/utils/fetchWordInfo";
 
 // TODO: USE usestate FOR FETCHING
@@ -112,6 +114,28 @@ export default function WordCard({
 									synsetid: synset.synsetid,
 									wordid: syno.wordid,
 								});
+
+								/**
+								 * watching user click
+								 */
+								fetch(`${CLICK_V2_BASEURL}/${userId}`,
+									{
+										body: JSON.stringify(
+											{
+												baseWord: word,
+												clickedWord: syno.word,
+												date: generateTimestamp(),
+												path: location.pathname,
+												synsetid: synset.synsetid,
+												type: CLICK_TYPE.wordCard
+											} as WordCardClick
+										),
+										headers: {
+											"Content-Type": "application/json",
+										},
+										method: "POST",
+									},
+								)
 							}}>
 								<strong>{syno.word}</strong>
 							</Bouncing>

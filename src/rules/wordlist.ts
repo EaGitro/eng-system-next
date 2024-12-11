@@ -9,23 +9,23 @@
  */
 
 export const WORD_LIST_ORDERED = [
-	{
-		words: [
-			"antics",
-			"batch",
-			"connoisseur",
-			"foreboding",
-			"haunch",
-			"scaffold",
-		],
-		choices: [
-			undefined,
-			"foolish behavior",
-			"a group of things",
-			"person with a good knowledge of art or music",
-			null,
-		],
-	},
+	// {
+	// 	words: [
+	// 		"antics",
+	// 		"batch",
+	// 		"connoisseur",
+	// 		"foreboding",
+	// 		"haunch",
+	// 		"scaffold",
+	// 	],
+	// 	choices: [
+	// 		undefined,
+	// 		"foolish behavior",
+	// 		"a group of things",
+	// 		"person with a good knowledge of art or music",
+	// 		null,
+	// 	],
+	// },
 	{
 		words: ["auspices", "dregs", "hostage", "jumble", "saliva", "truce"],
 		choices: [
@@ -90,16 +90,16 @@ export const WORD_LIST_ORDERED = [
 	// 		null,
 	// 	],
 	// },
-	// {
-	// 	words: ["blaspheme", "endorse", "nurture", "skid", "squint", "straggle"],
-	// 	choices: [
-	// 		undefined,
-	// 		"slip or slide",
-	// 		"give care and food to",
-	// 		"speak badly about God",
-	// 		null,
-	// 	],
-	// },
+	{
+		words: ["blaspheme", "endorse", "nurture", "skid", "squint", "straggle"],
+		choices: [
+			undefined,
+			"slip or slide",
+			"give care and food to",
+			"speak badly about God",
+			null,
+		],
+	},
 	// {
 	// 	words: ["clinch", "jot", "mutilate", "smolder", "topple", "whiz"],
 	// 	choices: [
