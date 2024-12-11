@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 
+import { Loader } from "lucide-react";
+// import { redirect, useRouter } from "next/navigation";
 import useSWR from "swr";
 
 import WordCard from "./WordCard";
@@ -24,6 +26,7 @@ import {
 } from "~/components/shadcnCustomized/CustomCarousel";
 import { Button } from "~/components/ui/button";
 import { fetcher } from "~/utils/swrFetcher";
+import { sleep } from "~/utils/util";
 
 export default function WordCards({
 	defaultWordInfos,
@@ -35,6 +38,10 @@ export default function WordCards({
 	wordids: [string, number, string][];
 }) {
 	const [wordInfos, setWordInfos] = useState<WordInfosType>(defaultWordInfos);
+
+	const [loading, setLoading] = useState<boolean>(false)
+
+	// const router = useRouter()
 
 	const cardComps = wordids.map((wid, index) => {
 		const { data, error, isLoading } = useSWR(
@@ -91,10 +98,11 @@ export default function WordCards({
 						}}
 					>
 						<Button
-							asChild
+							// asChild
 							className=""
 							key={"endbutton"}
 							onClick={async () => {
+								setLoading(true)
 								console.log(wordInfos);
 								await fetch("/api/user-data/update-all-learnings", {
 									body: JSON.stringify(wordInfos),
@@ -103,9 +111,13 @@ export default function WordCards({
 									},
 									method: "POST",
 								});
+								await sleep(500)
+								setLoading(false)
+								// window.location.href = "/learning/graph"
+								// router.push("/learning/graph")
 							}}
 						>
-							<Link href={"/learning/words"} userId={userId}>
+							<Link href={"/learning/graph"} userId={userId}>
 								学習を終了する
 							</Link>
 						</Button>
@@ -118,29 +130,32 @@ export default function WordCards({
 	console.log(wordInfos, wordids);
 
 	return (
-		<Carousel
-			style={{
-				height: "100%",
-				width: "100vw",
+		<>
+			{loading && (<Loader className="absolute inset-0 m-auto animate-spin" size={100} />)}
+			<Carousel
+				style={{
+					height: "100%",
+					width: "100vw",
 				// overflow: "hidden",
 				// position: "relative",
-			}}
-		>
-			<CarouselContent
-				//  style={{ height: '100%', overflowY: 'auto' }}
-				style={{ display: "flex", height: "100%" }}
+				}}
 			>
-				{cardComps}
-				{/* {Cards} */}
-			</CarouselContent>
-			{/* <button className="embla__prev" onClick={scrollPrev}>
+				<CarouselContent
+				//  style={{ height: '100%', overflowY: 'auto' }}
+					style={{ display: "flex", height: "100%" }}
+				>
+					{cardComps}
+					{/* {Cards} */}
+				</CarouselContent>
+				{/* <button className="embla__prev" onClick={scrollPrev}>
                 Prev
             </button>
             <button className="embla__next" onClick={scrollNext}>
                 Next
             </button> */}
-			<CustomCarouselPrevious className="absolute left-4 z-10 w-16 h-16 opacity-70 border-double bg-stone-400" size={"icon"} />
-			<CustomCarouselNext className="absolute right-4 z-10 w-16 h-16 opacity-70 border-double bg-stone-400" size={"icon"} />
-		</Carousel>
+				<CustomCarouselPrevious className="absolute left-4 z-10 w-16 h-16 opacity-70 border-double bg-stone-400" size={"icon"} />
+				<CustomCarouselNext className="absolute right-4 z-10 w-16 h-16 opacity-70 border-double bg-stone-400" size={"icon"} />
+			</Carousel>
+		</>
 	);
 }
