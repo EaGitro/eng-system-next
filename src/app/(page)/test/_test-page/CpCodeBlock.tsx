@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { generateTimestamp } from "~/rules/clickdata";
+
 interface CodeBlockProps {
 	code: string;
 	prePost: "pre" | "post"
@@ -22,7 +24,7 @@ const CpCodeBlock: React.FC<CodeBlockProps> = ({ code, prePost }) => {
 		const blob = new Blob([code], { type: "text/plain" });
 		const link = document.createElement("a");
 		link.href = URL.createObjectURL(blob);
-		link.download = `test-result-${prePost}-${Date.now()}.txt`;
+		link.download = `test-result-${prePost}-${generateTimestamp()}.txt`;
 		link.click()
 		URL.revokeObjectURL(link.href)
 	}

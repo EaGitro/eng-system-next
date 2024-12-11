@@ -42,6 +42,7 @@ export type UserChoices = {
 		| tSENTENCE_MATCH_USER_CHOICE_TABLE.NONE_OF_ABOVE
 		| tSENTENCE_MATCH_USER_CHOICE_TABLE.I_DONT_KNOW// 現状は 0-3 ただし未回答とわからないを含めて 0-5 に拡張したい => TODO: ANS も 1-4 に
 		isCorrect: boolean;
+		isNullAns: boolean; 	// もし答えが null (3つの選択肢以外) なら true
 	};
 };
 

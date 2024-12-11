@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import type { TEST_ANS, TEST_DATA, tSENTENCE_MATCH_USER_CHOICE_TABLE, UserChoices } from "~/app/(page)/test/_test-page/type";
-import type { Expand, ObjectEntriesOf } from "~/app/types/utils";
+import type { Expand } from "~/app/types/utils";
 
 import MatchingTable from "~/app/(page)/test/_test-page/MatchingTable";
 import TimerTimeLeft from "~/app/(page)/test/_test-page/TimerTimeLeft";
@@ -20,12 +20,13 @@ export default function SentenceMatch({
 
 	console.log(matches)
 	const handleSubmit = () => {
-		const matchResults: UserChoices = Object.fromEntries((Object.entries(testAns) as ObjectEntriesOf<typeof testAns>)
-			.map(([key, v]) => ([
-				key,
+		const matchResults: UserChoices = Object.fromEntries(testData.map((v)=>v.words).flat()
+			.map((word) => ([
+				word,
 				{
-					choice: ((matches[key] ? matches[key] : SENTENCE_MATCH_USER_CHOICE_TABLE.UNSELECTED) as tSENTENCE_MATCH_USER_CHOICE_TABLE.tCHOICES),
-					isCorrect: matches[key] == (v.num??4)
+					choice: ((matches[word] ? matches[word] : SENTENCE_MATCH_USER_CHOICE_TABLE.UNSELECTED) as tSENTENCE_MATCH_USER_CHOICE_TABLE.tCHOICES),
+					isCorrect: matches[word] == (testAns[word as keyof typeof testAns].num??4),
+					isNullAns:  (testAns[word as keyof typeof testAns].num) === null
 				}
 			])))
 		onComplete(matchResults)
