@@ -71,7 +71,7 @@ export default async function ProtectedPage() {
 					</ShadcnP>
 				)
 				}
-				{ (
+				{/* { (
 					<ShadcnP>
 						<Button asChild>
 							<Link href={"/learning/graph"} userId={session.user.id}>
@@ -79,7 +79,7 @@ export default async function ProtectedPage() {
 							</Link>
 						</Button>
 					</ShadcnP>
-				)}
+				)} */}
 			</div>
 			<div className={"absolute inset-x-0 bottom-0"}>
 				このアプリケーションは日本語WordNetを使用しています。

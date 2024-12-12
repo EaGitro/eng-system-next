@@ -25,17 +25,20 @@ import {
 	CustomCarouselPrevious,
 } from "~/components/shadcnCustomized/CustomCarousel";
 import { Button } from "~/components/ui/button";
+import { USER_GROUP } from "~/rules/prisma";
 import { fetcher } from "~/utils/swrFetcher";
 import { sleep } from "~/utils/util";
 
 export default function WordCards({
 	defaultWordInfos,
+	group,
 	userId,
-	wordids,
+	wordids
 }: {
 	defaultWordInfos: WordInfosType;
+	group: number;
 	userId: string;
-	wordids: [string, number, string][];
+	wordids: [string, number, string][]
 }) {
 	const [wordInfos, setWordInfos] = useState<WordInfosType>(defaultWordInfos);
 
@@ -117,7 +120,7 @@ export default function WordCards({
 								// router.push("/learning/graph")
 							}}
 						>
-							<Link href={"/learning/graph"} userId={userId}>
+							<Link href={group==USER_GROUP.SYSTEM?"/learning/graph":"/learning/words"} userId={userId}>
 								学習を終了する
 							</Link>
 						</Button>

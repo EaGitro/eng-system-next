@@ -5,6 +5,7 @@ import type { WordInfosType } from "~/app/types/statesContextsTypes";
 
 import WordCards from "~/components/WordCards";
 import { authOptions } from "~/lib/auth";
+import prisma from "~/lib/prisma";
 import { nextFetchCache } from "~/rules/fetchCache";
 import { WORD_LIST_ORDERED } from "~/rules/wordlist";
 
@@ -17,6 +18,14 @@ export default async function Page({
 		redirect("/mypage");
 	}
 
+	const group = await prisma.userGroup.findUnique({
+		where:{
+			userId: session.user.id
+		}
+	})
+	if(!group){
+		redirect("/mypage")
+	}
 	// const q = new URLSearchParams({ level: params.level, section: `${Number(params.section) + 1}` })
 	// const url = createApiRouteUrl(`/api/word-list?${q}`);
 	// console.log("level-section-url",url)
@@ -43,6 +52,7 @@ export default async function Page({
 	return (
 		<WordCards
 			defaultWordInfos={wordInfos}
+			group={group?.group}
 			userId={session.user.id}
 			wordids={wordids}
 		/>
